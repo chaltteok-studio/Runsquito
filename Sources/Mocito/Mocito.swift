@@ -13,7 +13,7 @@ public typealias Value = Any
 open class Mocito {
     public static let `default` = Mocito()
     
-    private(set) var slots: [Key: Slot] = [:]
+    public private(set) var slots: [Key: Slot] = [:]
     
     public init() { }
     

@@ -11,8 +11,8 @@ open class Slot {
     public let type: Any.Type
     public let description: String?
     
-    private(set) var value: Value?
-    private(set) var container: [Key: Mock]
+    public private(set) var value: Value?
+    public private(set) var container: [Key: Mock]
     
     public init(type: Any.Type, description: String? = nil, container: [Key: Mock] = [:]) {
         self.type = type

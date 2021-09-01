@@ -8,39 +8,39 @@
 import Foundation
 
 public typealias Key = String
-public typealias Value = Any
 
 open class Mocito {
-    public static let `default` = Mocito()
+    // MARK: - Property
+    public static let `default` = Mocito(description: "Default mocito.")
     
-    public private(set) var slots: [Key: Slot] = [:]
+    public private(set) var slots: [Key: AnySlot] = [:]
+    public let description: String?
     
-    public init() { }
-    
-    open func addSlot(_ slot: Slot, for key: Key) throws {
-        guard slots[key] == nil else { throw MocitoError.keyDuplicate(key) }
-        slots[key] = slot
+    // MARK: - Intiailzer
+    public init(
+        description: String? = nil,
+        slots: [Key: AnySlot] = [:]
+    ) {
+        self.description = description
+        self.slots = slots
     }
     
-    open func addMock(_ mock: Mock, for key: Key, in slotKey: Key, description: String? = nil) throws {
-        if let slot = slots[slotKey] {
-            try slot.add(mock, for: key)
-        } else {
-            let slot = Slot(
-                type: type(of: mock.value),
-                description: description,
-                container: [key: mock]
-            )
-            
-            slots[slotKey] = slot
-        }
+    // MARK: - Public
+    open func addSlot<S: Slot>(_ slot: S, for key: Key) throws {
+        guard slots[key] == nil else { throw MocitoError.keyDuplicate(key) }
+        slots[key] = AnySlot(slot)
+    }
+    
+    open func addItem<I: Item>(_ item: I, for key: Key, in slotKey: Key) throws {
+        guard let slot = slots[slotKey] else { throw MocitoError.slotNotFound(slotKey) }
+        try slot.add(AnyItem(item), for: key)
     }
     
     open func removeSlot(for key: Key) {
         slots[key] = nil
     }
     
-    open func removeMock(for key: Key, in slotKey: Key) {
+    open func removeItem(for key: Key, in slotKey: Key) {
         slots[slotKey]?.remove(for: key)
     }
     
@@ -48,15 +48,17 @@ open class Mocito {
         slots.removeAll()
     }
     
-    open func set(value: Value?, in slotKey: Key) throws {
+    open func set<Value>(_ value: Value?, in slotKey: Key) throws {
         try slots[slotKey]?.set(value)
     }
     
     open func value<T>(for key: Key) -> T? {
-        slots[key]?.value(T.self)
+        slots[key]?.value as? T
     }
     
     open func value<T>(_ type: T.Type, for key: Key) -> T? {
         value(for: key)
     }
+    
+    // MARK: - Private
 }

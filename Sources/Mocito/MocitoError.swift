@@ -9,12 +9,20 @@ import Foundation
 
 enum MocitoError: LocalizedError {
     case keyDuplicate(Key)
+    case slotNotFound(Key)
+    case failToParse(Error?)
     case typeMismatch
     
     var errorDescription: String? {
         switch self {
         case let .keyDuplicate(key):
             return "Add duplicated key(\"\(key)\")."
+            
+        case let .slotNotFound(key):
+            return "Slot not added by key(\"\(key)\")"
+            
+        case .failToParse:
+            return "Fail to parse."
             
         case .typeMismatch:
             return "fail to add because value's type doesn't match already added value."

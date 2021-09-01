@@ -10,6 +10,9 @@ import Foundation
 /// Type erased `Slot`
 public struct AnySlot: Slot {
     // MARK: - Property
+    private let _type: () -> Any.Type
+    public var type: Any.Type { _type() }
+    
     private let _value: () -> Any?
     public var value: Any? { _value() }
     private let _storage: () -> [Key: AnyItem]
@@ -25,6 +28,8 @@ public struct AnySlot: Slot {
     
     // MARK: - Initializer
     public init<S: Slot>(_ slot: S) {
+        self._type = { S.Value.self }
+        
         self._description = { slot.description }
         self._value = { slot.value }
         self._storage = { slot.storage.mapValues { AnyItem($0) } }

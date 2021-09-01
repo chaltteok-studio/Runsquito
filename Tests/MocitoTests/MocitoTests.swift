@@ -1,6 +1,6 @@
 //
 //  MocitoTests.swift
-//  Mocito
+//  MocitoTests
 //
 //  Created by jsilver on 2021/08/24.
 //
@@ -8,17 +8,20 @@
 import XCTest
 @testable import Mocito
 
-final class MocitoMockTests: XCTestCase {
+final class MocitoTests: XCTestCase {
+    // MARK: - Property
     var sut: Mocito!
     
+    // MARK: - Lifecycle
     override func setUp() {
         sut = Mocito()
     }
     
+    // MARK: - Test
     func test_that_slot_is_added_when_slot_add() throws {
         // MARK: Given
         let key = "mocito-test-slot"
-        let slot = Slot(type: Bool.self)
+        let slot = ParseableSlot<Bool>()
         
         // MARK: When
         try sut.addSlot(slot, for: key)
@@ -30,9 +33,9 @@ final class MocitoMockTests: XCTestCase {
     func test_that_slot_is_not_added_when_slot_add_by_duplicated_key() throws {
         // MARK: Given
         let key = "mocito-test-slot"
-        try sut.addSlot(Slot(type: Bool.self), for: key)
+        try sut.addSlot(ParseableSlot<Bool>(), for: key)
         
-        let slot = Slot(type: Int.self)
+        let slot = ParseableSlot<Int>()
         
         // MARK: When
         
@@ -40,24 +43,68 @@ final class MocitoMockTests: XCTestCase {
         XCTAssertThrowsError(try sut.addSlot(slot, for: key))
     }
     
-    func test_that_slot_is_added_when_mock_add() throws {
+    func test_that_item_is_added_into_storage_when_item_add() throws {
         // MARK: Given
         let slotKey = "mocito-test-slot"
         
-        let mock = Mock(value: true)
-        let key = "mocito-test-mock"
+        try sut.addSlot(ParseableSlot<Bool>(), for: slotKey)
+        
+        let key = "mocito-test-item"
+        let item = ValueItem(true)
         
         // MARK: When
-        try sut.addMock(mock, for: key, in: slotKey)
+        try sut.addItem(item, for: key, in: slotKey)
         
         // MARK: Then
-        XCTAssertNotNil(sut.slots[slotKey])
+        XCTAssertNotNil(sut.slots[slotKey]?.storage[key])
+    }
+    
+    func test_that_item_is_not_added_into_storage_when_slot_not_found() throws {
+        // MARK: Given
+        let slotKey = "mocito-test-slot"
+        let key = "mocito-test-item"
+        let item = ValueItem(122)
+        
+        // MARK: When
+        
+        // MARK: Then
+        XCTAssertThrowsError(try sut.addItem(item, for: key, in: slotKey))
+    }
+    
+    func test_that_item_is_not_added_into_storage_when_item_type_dose_not_match_of_slot() throws {
+        // MARK: Given
+        let slotKey = "mocito-test-slot"
+        
+        try sut.addSlot(ParseableSlot<Bool>(), for: slotKey)
+        
+        let key = "mocito-test-item"
+        let item = ValueItem(122)
+        
+        // MARK: When
+        
+        // MARK: Then
+        XCTAssertThrowsError(try sut.addItem(item, for: key, in: slotKey))
+    }
+    
+    func test_that_item_is_not_added_into_storage_when_item_type_dose_not_match_of_slot_by_slot() throws {
+        // MARK: Given
+        let slotKey = "mocito-test-slot"
+        
+        try sut.addSlot(ParseableSlot<Bool>(), for: slotKey)
+        
+        let key = "mocito-test-item"
+        let item = AnyItem(ValueItem(122))
+        
+        // MARK: When
+        
+        // MARK: Then
+        XCTAssertThrowsError(try sut.slots[slotKey]?.add(item, for: key))
     }
     
     func test_that_slot_is_removed_when_slot_remove_by_key() throws {
         // MARK: Given
         let key = "mocito-test-slot"
-        try sut.addSlot(Slot(type: Bool.self), for: key)
+        try sut.addSlot(ParseableSlot<Bool>(), for: key)
         
         // MARK: When
         sut.removeSlot(for: key)
@@ -66,10 +113,28 @@ final class MocitoMockTests: XCTestCase {
         XCTAssertNil(sut.slots[key])
     }
     
+    func test_that_item_is_removed_from_storage_when_item_remove_by_key() throws {
+        // MARK: Given
+        let slotKey = "mocito-test-slot"
+        
+        try sut.addSlot(ParseableSlot<Bool>(), for: slotKey)
+        
+        let key = "mocito-test-item"
+        let item = ValueItem(true)
+        
+        try sut.addItem(item, for: key, in: slotKey)
+        
+        // MARK: When
+        sut.removeItem(for: key, in: slotKey)
+        
+        // MARK: Then
+        XCTAssertNil(sut.slots[slotKey]?.storage[key])
+    }
+    
     func test_that_slot_is_removed_when_remove_all_slots() throws {
         // MARK: Given
         let key = "mocito-test-slot"
-        try sut.addSlot(Slot(type: Bool.self), for: key)
+        try sut.addSlot(ParseableSlot<Bool>(), for: key)
         
         // MARK: When
         sut.removeAll()
@@ -78,79 +143,15 @@ final class MocitoMockTests: XCTestCase {
         XCTAssertNil(sut.slots[key])
     }
     
-    func test_that_mock_is_added_into_container_when_mock_add() throws {
-        // MARK: Given
-        let slotKey = "mocito-test-slot"
-        
-        try sut.addSlot(Slot(type: Bool.self), for: slotKey)
-        
-        let key = "mocito-test-mock"
-        let mock = Mock(value: true)
-        
-        // MARK: When
-        try sut.addMock(mock, for: key, in: slotKey)
-        
-        // MARK: Then
-        XCTAssertNotNil(sut.slots[slotKey]?.container[key])
-    }
-    
-    func test_that_mock_is_not_added_into_container_when_mock_type_dose_not_match_of_slot() throws {
-        // MARK: Given
-        let slotKey = "mocito-test-slot"
-        
-        try sut.addSlot(Slot(type: Bool.self), for: slotKey)
-        
-        let key = "mocito-test-mock"
-        let mock = Mock(value: 122)
-        
-        // MARK: When
-        
-        // MARK: Then
-        XCTAssertThrowsError(try sut.addMock(mock, for: key, in: slotKey))
-    }
-    
-    func test_that_mock_is_not_added_into_container_when_mock_type_dose_not_match_of_slot_by_slot() throws {
-        // MARK: Given
-        let slotKey = "mocito-test-slot"
-        
-        try sut.addSlot(Slot(type: Bool.self), for: slotKey)
-        
-        let key = "mocito-test-mock"
-        let mock = Mock(value: 122)
-        
-        // MARK: When
-        
-        // MARK: Then
-        XCTAssertThrowsError(try sut.slots[slotKey]?.add(mock, for: key))
-    }
-    
-    func test_that_mock_is_removed_from_container_when_mock_remove_by_key() throws {
-        // MARK: Given
-        let slotKey = "mocito-test-slot"
-        
-        try sut.addSlot(Slot(type: Bool.self), for: slotKey)
-        
-        let key = "mocito-test-mock"
-        let mock = Mock(value: true)
-        
-        try sut.addMock(mock, for: key, in: slotKey)
-        
-        // MARK: When
-        sut.removeMock(for: key, in: slotKey)
-        
-        // MARK: Then
-        XCTAssertNil(sut.slots[slotKey]?.container[key])
-    }
-    
     func test_that_value_is_set_when_value_set() throws {
         // MARK: Given
         let slotKey = "mocito-test-slot"
         let value = true
         
-        try sut.addSlot(Slot(type: Bool.self), for: slotKey)
+        try sut.addSlot(ParseableSlot<Bool>(), for: slotKey)
         
         // MARK: When
-        try sut.set(value: value, in: slotKey)
+        try sut.set(value, in: slotKey)
         
         // MARK: Then
         XCTAssertEqual(sut.value(for: slotKey), value)
@@ -160,12 +161,24 @@ final class MocitoMockTests: XCTestCase {
         // MARK: Given
         let slotKey = "mocito-test-slot"
         
-        try sut.addSlot(Slot(type: Bool.self), for: slotKey)
+        try sut.addSlot(ParseableSlot<Bool>(), for: slotKey)
         
         // MARK: When
         
         // MARK: Then
-        XCTAssertThrowsError(try sut.set(value: 122, in: slotKey))
+        XCTAssertThrowsError(try sut.set(122, in: slotKey))
+    }
+    
+    func test_that_value_is_not_set_when_value_type_does_not_match_of_slot_by_slot() throws {
+        // MARK: Given
+        let slotKey = "mocito-test-slot"
+        
+        try sut.addSlot(ParseableSlot<Bool>(), for: slotKey)
+        
+        // MARK: When
+        
+        // MARK: Then
+        XCTAssertThrowsError(try sut.slots[slotKey]?.set(122))
     }
     
     func test_that_value_is_not_set_when_slot_did_not_add() throws {
@@ -174,9 +187,11 @@ final class MocitoMockTests: XCTestCase {
         let value = true
         
         // MARK: When
-        try sut.set(value: true, in: slotKey)
+        try sut.set(true, in: slotKey)
         
         // MARK: Then
         XCTAssertNotEqual(sut.value(Bool.self, for: slotKey), value)
     }
+    
+    // MARK: - Private
 }

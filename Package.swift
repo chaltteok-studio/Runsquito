@@ -5,10 +5,17 @@ import PackageDescription
 
 let package = Package(
     name: "Mocito",
+    platforms: [
+        .iOS(.v11)
+    ],
     products: [
         .library(
             name: "Mocito",
             targets: ["Mocito"]
+        ),
+        .library(
+            name: "MocitoKit",
+            targets: ["MocitoKit"]
         )
     ],
     dependencies: [
@@ -18,6 +25,10 @@ let package = Package(
         .target(
             name: "Mocito",
             dependencies: []
+        ),
+        .target(
+            name: "MocitoKit",
+            dependencies: ["Mocito"]
         ),
         .testTarget(
             name: "MocitoTests",

@@ -8,14 +8,21 @@
 import UIKit
 import Runsquito
 
+protocol SlotListViewControllerDelegate: AnyObject {
+    func close()
+}
+
 final class SlotListViewController: UIViewController {
     // MARK: - View
     private let root = SlotListView()
     
     private var tableView: UITableView { root.tableView }
+    private var closeButton: UIButton { root.closeButton }
     
     // MARK: - Property
     private let runsquito: Runsquito
+    
+    weak var delegate: SlotListViewControllerDelegate?
     
     private var items: [(Key, AnySlot)] {
         Runsquito.default.slots
@@ -42,6 +49,12 @@ final class SlotListViewController: UIViewController {
         
         setUpComponent()
         setUpLayout()
+        setUpAction()
+    }
+    
+    // MARK: - Action
+    @objc private func closeTap(_ sender: UIButton) {
+        delegate?.close()
     }
     
     // MARK: - Public
@@ -56,6 +69,10 @@ final class SlotListViewController: UIViewController {
     
     private func setUpLayout() {
         
+    }
+    
+    private func setUpAction() {
+        closeButton.addTarget(self, action: #selector(closeTap(_:)), for: .touchUpInside)
     }
 }
 

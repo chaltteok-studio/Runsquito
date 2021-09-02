@@ -16,7 +16,10 @@ public final class RunsquitoViewController: UINavigationController {
     // MARK: - Initializer
     public init(runsquito: Runsquito = .default) {
         let viewController = SlotListViewController(runsquito: runsquito)
+        
         super.init(rootViewController: viewController)
+        
+        viewController.delegate = self
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -28,12 +31,23 @@ public final class RunsquitoViewController: UINavigationController {
         super.viewDidLoad()
         
         setUpComponent()
+        setUpLayout()
     }
     
     // MARK: - Public
     
     // MARK: - Private
-    func setUpComponent() {
+    private func setUpComponent() {
         
+    }
+    
+    private func setUpLayout() {
+        
+    }
+}
+
+extension RunsquitoViewController: SlotListViewControllerDelegate {
+    func close() {
+        presentingViewController?.dismiss(animated: true, completion: nil)
     }
 }

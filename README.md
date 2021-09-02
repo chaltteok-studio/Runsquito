@@ -1,3 +1,3 @@
-# Mocito
+# Runsquito
 
-The `Mocito` is tool that inject mock data on runtime.
+The `Runsquito` is tool that inject mock data on runtime.

@@ -4,18 +4,18 @@
 import PackageDescription
 
 let package = Package(
-    name: "Mocito",
+    name: "Runsquito",
     platforms: [
         .iOS(.v11)
     ],
     products: [
         .library(
-            name: "Mocito",
-            targets: ["Mocito"]
+            name: "Runsquito",
+            targets: ["Runsquito"]
         ),
         .library(
-            name: "MocitoKit",
-            targets: ["MocitoKit"]
+            name: "RunsquitoKit",
+            targets: ["RunsquitoKit"]
         )
     ],
     dependencies: [
@@ -23,16 +23,16 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Mocito",
+            name: "Runsquito",
             dependencies: []
         ),
         .target(
-            name: "MocitoKit",
-            dependencies: ["Mocito"]
+            name: "RunsquitoKit",
+            dependencies: ["Runsquito"]
         ),
         .testTarget(
-            name: "MocitoTests",
-            dependencies: ["Mocito"]
+            name: "RunsquitoTests",
+            dependencies: ["Runsquito"]
         )
     ]
 )

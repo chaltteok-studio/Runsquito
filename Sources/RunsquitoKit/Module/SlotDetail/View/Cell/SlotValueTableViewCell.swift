@@ -10,21 +10,16 @@ import Runsquito
 
 final class SlotValueTableViewCell: UITableViewCell {
     // MARK: - View
-    private let valueTitleLabel: UILabel = {
+    private let valueLabel: UILabel = {
         let view = UILabel()
-        view.setContentHuggingPriority(.required, for: .horizontal)
-        view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
-        view.text = "Current Value"
         
         return view
     }()
     
-    private let valueLabel: UILabel = {
-        let view = UILabel()
-        view.textAlignment = .right
-        view.font = .systemFont(ofSize: 14)
+    private let arrowButton: UIButton = {
+        let view = UIButton()
+        view.setImage(UIImage(named: "arrowRight", in: .module, compatibleWith: nil), for: .normal)
         
         return view
     }()
@@ -76,7 +71,12 @@ final class SlotValueTableViewCell: UITableViewCell {
     }
     
     private func setUpLayout() {
-        [valueTitleLabel, valueLabel].forEach { valueStackView.addArrangedSubview($0) }
+        [
+            valueLabel,
+            arrowButton
+        ].forEach {
+            valueStackView.addArrangedSubview($0)
+        }
         
         [
             valueStackView

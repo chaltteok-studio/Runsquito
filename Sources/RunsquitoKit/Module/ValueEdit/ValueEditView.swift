@@ -32,27 +32,7 @@ final class ValueEditView: UIView {
         return view
     }()
     
-    let saveButton: UIButton = {
-        let view = UIButton(type: .system)
-        view.layer.cornerRadius = 4
-        view.backgroundColor = view.tintColor
-        view.titleLabel?.font = .systemFont(ofSize: 16)
-        view.setTitle("Save", for: .normal)
-        view.setTitleColor(.white, for: .normal)
-        
-        return view
-    }()
-    
-    private let contentStackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .vertical
-        view.spacing = 16
-        
-        return view
-    }()
-    
     // MARK: - Property
-    private var contentStackViewBottomConstraint: NSLayoutConstraint?
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -81,13 +61,11 @@ final class ValueEditView: UIView {
         let targetRect = convert(bounds, to: window)
         let intersectRect = targetRect.intersection(keyboardRect)
         
-        contentStackViewBottomConstraint?.constant = -(intersectRect.height - safeAreaInsets.bottom + 8)
-        layoutIfNeeded()
+        // TODO:
     }
     
     @objc private func keyboardHideShow(_ sender: NSNotification) {
-        contentStackViewBottomConstraint?.constant = -8
-        layoutIfNeeded()
+        //
     }
     
     // MARK: - Public
@@ -103,37 +81,24 @@ final class ValueEditView: UIView {
         if #available(iOS 13.0, *) {
             backgroundColor = .systemGroupedBackground
         } else {
-            backgroundColor = .init(red: 0.95, green: 0.95, blue: 0.97, alpha: 1)
+            backgroundColor = .groupTableViewBackground
         }
         
         textView.inputAccessoryView = keyboardAccessoryView
     }
     
     private func setUpLayout() {
-        [
-            textView,
-            saveButton
-        ].forEach { contentStackView.addArrangedSubview($0) }
-        
-        NSLayoutConstraint.activate([
-            saveButton.heightAnchor.constraint(equalToConstant: 48)
-        ])
-        
-        [contentStackView].forEach {
+        [textView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             addSubview($0)
         }
         
-        let contentStackViewBottomConstraint = contentStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -8)
-        
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 8),
-            contentStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            contentStackViewBottomConstraint,
-            contentStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16)
+            textView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            textView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -24),
+            textView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            textView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 24)
         ])
-        
-        self.contentStackViewBottomConstraint = contentStackViewBottomConstraint
     }
     
     private func setUpAction() {
@@ -150,7 +115,5 @@ final class ValueEditView: UIView {
             name: UIResponder.keyboardWillHideNotification,
             object: nil
         )
-        
-        
     }
 }

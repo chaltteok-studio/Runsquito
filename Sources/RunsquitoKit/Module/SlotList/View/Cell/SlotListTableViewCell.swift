@@ -14,7 +14,6 @@ final class SlotListTableViewCell: UITableViewCell {
         let view = UILabel()
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         view.text = "ID"
         
@@ -24,6 +23,7 @@ final class SlotListTableViewCell: UITableViewCell {
     private let idLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .right
+        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         
         return view
@@ -41,7 +41,6 @@ final class SlotListTableViewCell: UITableViewCell {
         let view = UILabel()
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         view.text = "Value"
         
@@ -51,6 +50,7 @@ final class SlotListTableViewCell: UITableViewCell {
     private let valueLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .right
+        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         
         return view
@@ -68,7 +68,6 @@ final class SlotListTableViewCell: UITableViewCell {
         let view = UILabel()
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         view.text = "Container"
         
@@ -78,6 +77,7 @@ final class SlotListTableViewCell: UITableViewCell {
     private let containerLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .right
+        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         
         return view
@@ -94,6 +94,7 @@ final class SlotListTableViewCell: UITableViewCell {
     private let descriptionLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
+        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         
         return view
@@ -128,6 +129,8 @@ final class SlotListTableViewCell: UITableViewCell {
         valueLabel.text = nil
         containerLabel.text = nil
         descriptionLabel.text = nil
+        
+        descriptionLabel.isHidden = true
     }
     
     // MARK: - Public
@@ -139,6 +142,8 @@ final class SlotListTableViewCell: UITableViewCell {
         valueLabel.text = "\(slot.value ?? "nil") (\(String(describing: slot.type)))"
         containerLabel.text = "\(slot.storage.count)"
         descriptionLabel.text = slot.description
+        
+        descriptionLabel.isHidden = slot.description == nil
     }
     
     // MARK: - Private

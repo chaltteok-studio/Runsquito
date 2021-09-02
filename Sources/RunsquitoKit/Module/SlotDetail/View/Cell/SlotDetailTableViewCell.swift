@@ -14,7 +14,6 @@ final class SlotDetailTableViewCell: UITableViewCell {
         let view = UILabel()
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         view.text = "ID"
         
@@ -24,6 +23,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     private let idLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .right
+        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         
         return view
@@ -41,7 +41,6 @@ final class SlotDetailTableViewCell: UITableViewCell {
         let view = UILabel()
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         view.text = "Value"
         
@@ -51,6 +50,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     private let valueLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .right
+        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         
         return view
@@ -67,6 +67,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     private let descriptionLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
+        view.textColor = .gray
         view.font = .systemFont(ofSize: 14)
         
         return view
@@ -100,6 +101,8 @@ final class SlotDetailTableViewCell: UITableViewCell {
         idLabel.text = nil
         valueLabel.text = nil
         descriptionLabel.text = nil
+        
+        descriptionLabel.isHidden = true
     }
     
     // MARK: - Public
@@ -110,6 +113,8 @@ final class SlotDetailTableViewCell: UITableViewCell {
         idLabel.text = id
         valueLabel.text = "\(item.value)"
         descriptionLabel.text = item.description
+        
+        descriptionLabel.isHidden = item.description == nil
     }
     
     // MARK: - Private

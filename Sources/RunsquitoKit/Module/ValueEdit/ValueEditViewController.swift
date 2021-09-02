@@ -17,7 +17,6 @@ final class ValueEditViewController: UIViewController {
     private let root = ValueEditView()
     
     private var textView: UITextView { root.textView }
-    private var saveButton: UIButton { root.saveButton }
     
     // MARK: - Property
     private let key: Key
@@ -68,6 +67,8 @@ final class ValueEditViewController: UIViewController {
     private func setUpComponent() {
         title = "\(key)"
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTap(_:)))
+        
         if let data = try? slot.encode() {
             textView.text = String(data: data, encoding: .utf8)
         }
@@ -78,7 +79,7 @@ final class ValueEditViewController: UIViewController {
     }
     
     private func setUpAction() {
-        saveButton.addTarget(self, action: #selector(saveTap(_:)), for: .touchUpInside)
+        
     }
     
     private func showAlert(error: Error) {

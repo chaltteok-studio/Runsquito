@@ -8,12 +8,34 @@
 import UIKit
 import Runsquito
 
+struct SectionModel<Section, Item> {
+    let section: Section
+    let items: [Item]
+}
+
 protocol SlotDetailViewControllerDelegate: AnyObject {
     func valueChanged()
 }
 
 final class SlotDetailViewController: UIViewController {
-    enum CellModel {
+    typealias SlotDetailSectionModel = SectionModel<SectionType, CellType>
+    
+    enum SectionType {
+        case value
+        case item
+        
+        var title: String {
+            switch self {
+            case .value:
+                return "CURRENT VALUE"
+                
+            case .item:
+                return "STORAGE"
+            }
+        }
+    }
+    
+    enum CellType {
         case value
         case item(Key, AnyItem)
     }
@@ -27,8 +49,12 @@ final class SlotDetailViewController: UIViewController {
     private let key: Key
     private let slot: AnySlot
     
-    private var items: [CellModel] {
-        [.value] + slot.storage.map { .item($0, $1) }
+    private var items: [SlotDetailSectionModel] {
+        [
+            SlotDetailSectionModel(section: .value, items: [.value]),
+            SlotDetailSectionModel(section: .item, items: slot.storage.map { .item($0, $1) })
+        ]
+            .filter { !$0.items.isEmpty }
     }
     
     weak var delegate: SlotDetailViewControllerDelegate?
@@ -81,12 +107,16 @@ extension SlotDetailViewController: SlotResetTableViewHeaderFooterViewDelegate {
 }
 
 extension SlotDetailViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         items.count
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        items[section].items.count
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = items[indexPath.item]
+        let item = items[indexPath.section].items[indexPath.item]
         
         switch item {
         case .value:
@@ -115,7 +145,13 @@ extension SlotDetailViewController: UITableViewDataSource {
 }
 
 extension SlotDetailViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        items[section].section.title
+    }
+    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard section == tableView.numberOfSections - 1 else { return nil }
+        
         let identifier = String(describing: SlotResetTableViewHeaderFooterView.self)
         
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as? SlotResetTableViewHeaderFooterView else {
@@ -130,7 +166,7 @@ extension SlotDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let item = items[indexPath.item]
+        let item = items[indexPath.section].items[indexPath.item]
         
         switch item {
         case .value:

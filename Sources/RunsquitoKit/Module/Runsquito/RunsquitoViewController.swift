@@ -15,11 +15,12 @@ public final class RunsquitoViewController: UINavigationController {
     
     // MARK: - Initializer
     public init(runsquito: Runsquito = .default) {
+        super.init(nibName: nil, bundle: nil)
+        
         let viewController = SlotListViewController(runsquito: runsquito)
-        
-        super.init(rootViewController: viewController)
-        
         viewController.delegate = self
+        
+        viewControllers = [viewController]
     }
     
     public required init?(coder aDecoder: NSCoder) {

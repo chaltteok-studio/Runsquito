@@ -151,6 +151,8 @@ extension SlotDetailViewController: UITableViewDelegate {
 extension SlotDetailViewController: ValueEditViewControllerDelegate {
     func edited() {
         tableView.reloadData()
+        
+        delegate?.valueChanged()
         navigationController?.popViewController(animated: true)
     }
 }

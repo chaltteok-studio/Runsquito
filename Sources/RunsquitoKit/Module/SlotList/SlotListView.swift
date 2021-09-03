@@ -9,6 +9,22 @@ import UIKit
 
 final class SlotListView: UIView {
     // MARK: - View
+    let searchBar: UISearchBar = {
+        let view = UISearchBar()
+        view.enablesReturnKeyAutomatically = false
+        view.returnKeyType = .done
+        view.autocapitalizationType = .none
+        view.autocorrectionType = .no
+        view.searchBarStyle = .minimal
+        
+        return view
+    }()
+    
+    private let headerContainerView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 60))
+        return view
+    }()
+    
     let tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .grouped)
         
@@ -44,6 +60,8 @@ final class SlotListView: UIView {
     
     // MARK: - Lifecycle
     
+    // MARK: - Action
+    
     // MARK: - Public
     
     // MARK: - Private
@@ -58,9 +76,26 @@ final class SlotListView: UIView {
         } else {
             backgroundColor = .groupTableViewBackground
         }
+        
+        tableView.tableHeaderView = headerContainerView
     }
     
     private func setUpLayout() {
+        [searchBar].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            headerContainerView.addSubview($0)
+        }
+        
+        let searchBarTrailingConstraint = searchBar.trailingAnchor.constraint(equalTo: headerContainerView.trailingAnchor, constant: -16)
+        searchBarTrailingConstraint.priority = .defaultHigh
+        
+        NSLayoutConstraint.activate([
+            searchBar.topAnchor.constraint(equalTo: headerContainerView.topAnchor, constant: 8),
+            searchBarTrailingConstraint,
+            searchBar.leadingAnchor.constraint(equalTo: headerContainerView.leadingAnchor, constant: 16),
+            searchBar.heightAnchor.constraint(equalToConstant: 36)
+        ])
+        
         [
             tableView,
             closeButton

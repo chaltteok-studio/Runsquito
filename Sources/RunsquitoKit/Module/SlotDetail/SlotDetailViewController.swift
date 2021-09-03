@@ -43,16 +43,32 @@ final class SlotDetailViewController: UIViewController {
     // MARK: - View
     private let root = SlotDetailView()
     
+    private var searchBar: UISearchBar { root.searchBar }
     private var tableView: UITableView { root.tableView }
     
     // MARK: - Property
     private let key: Key
     private let slot: AnySlot
     
+    private var query: String = ""
     private var items: [SlotDetailSectionModel] {
         [
-            SlotDetailSectionModel(section: .value, items: [.value]),
-            SlotDetailSectionModel(section: .item, items: slot.storage.map { .item($0, $1) })
+            SlotDetailSectionModel(
+                section: .value,
+                items: [.value]
+            ),
+            SlotDetailSectionModel(
+                section: .item,
+                items: slot.storage
+                    .sorted { $0.key < $1.key }
+                    .filter { key, _ in
+                        let query = query.trimmingCharacters(in: .whitespaces)
+                        guard !query.isEmpty else { return true }
+                        
+                        return key.contains(query)
+                    }
+                    .map { .item($0, $1) }
+            )
         ]
             .filter { !$0.items.isEmpty }
     }
@@ -88,6 +104,8 @@ final class SlotDetailViewController: UIViewController {
     // MARK: - Private
     private func setUpComponent() {
         title = key
+        
+        searchBar.delegate = self
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -170,6 +188,8 @@ extension SlotDetailViewController: UITableViewDelegate {
         
         switch item {
         case .value:
+            view.endEditing(true)
+            
             let viewController = ValueEditViewController(key: key, slot: slot)
             viewController.delegate = self
             
@@ -181,6 +201,21 @@ extension SlotDetailViewController: UITableViewDelegate {
             
             delegate?.valueChanged()
         }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        view.endEditing(true)
+    }
+}
+
+extension SlotDetailViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        query = searchText
+        tableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
     }
 }
 

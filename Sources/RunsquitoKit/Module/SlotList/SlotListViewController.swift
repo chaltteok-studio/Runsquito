@@ -16,6 +16,7 @@ final class SlotListViewController: UIViewController {
     // MARK: - View
     private let root = SlotListView()
     
+    private var searchBar: UISearchBar { root.searchBar }
     private var tableView: UITableView { root.tableView }
     private var closeButton: UIButton { root.closeButton }
     
@@ -24,8 +25,16 @@ final class SlotListViewController: UIViewController {
     
     weak var delegate: SlotListViewControllerDelegate?
     
+    private var query: String = ""
     private var items: [(Key, AnySlot)] {
         Runsquito.default.slots
+            .sorted { $0.key < $1.key }
+            .filter { key, _ in
+                let query = query.trimmingCharacters(in: .whitespaces)
+                guard !query.isEmpty else { return true }
+                
+                return key.contains(query)
+            }
             .map { ($0, $1) }
     }
     
@@ -63,6 +72,8 @@ final class SlotListViewController: UIViewController {
     private func setUpComponent() {
         title = "Runsquito"
         
+        searchBar.delegate = self
+        
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -98,6 +109,8 @@ extension SlotListViewController: UITableViewDataSource {
 
 extension SlotListViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        view.endEditing(true)
+        
         tableView.deselectRow(at: indexPath, animated: true)
         
         let (key, slot) = items[indexPath.item]
@@ -107,10 +120,25 @@ extension SlotListViewController: UITableViewDelegate {
         
         navigationController?.pushViewController(viewController, animated: true)
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        view.endEditing(true)
+    }
 }
 
 extension SlotListViewController: SlotDetailViewControllerDelegate {
     func valueChanged() {
         tableView.reloadData()
+    }
+}
+
+extension SlotListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        query = searchText
+        tableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
     }
 }

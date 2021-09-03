@@ -12,8 +12,7 @@ final class SlotListTableViewCell: UITableViewCell {
     // MARK: - View
     private let idTitleLabel: UILabel = {
         let view = UILabel()
-        view.setContentHuggingPriority(.required, for: .horizontal)
-        view.setContentCompressionResistancePriority(.required, for: .horizontal)
+        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         view.font = .systemFont(ofSize: 14)
         view.text = "ID"
         
@@ -39,8 +38,7 @@ final class SlotListTableViewCell: UITableViewCell {
     
     private let valueTitleLabel: UILabel = {
         let view = UILabel()
-        view.setContentHuggingPriority(.required, for: .horizontal)
-        view.setContentCompressionResistancePriority(.required, for: .horizontal)
+        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         view.font = .systemFont(ofSize: 14)
         view.text = "Value"
         
@@ -64,17 +62,16 @@ final class SlotListTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let containerTitleLabel: UILabel = {
+    private let storageTitleLabel: UILabel = {
         let view = UILabel()
-        view.setContentHuggingPriority(.required, for: .horizontal)
-        view.setContentCompressionResistancePriority(.required, for: .horizontal)
+        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         view.font = .systemFont(ofSize: 14)
-        view.text = "Container"
+        view.text = "Storage"
         
         return view
     }()
     
-    private let containerLabel: UILabel = {
+    private let storageLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .right
         view.textColor = .gray
@@ -83,7 +80,7 @@ final class SlotListTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let containerStackView: UIStackView = {
+    private let storageStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
         view.spacing = 8
@@ -127,7 +124,7 @@ final class SlotListTableViewCell: UITableViewCell {
         
         idLabel.text = nil
         valueLabel.text = nil
-        containerLabel.text = nil
+        storageLabel.text = nil
         descriptionLabel.text = nil
         
         descriptionLabel.isHidden = true
@@ -140,7 +137,7 @@ final class SlotListTableViewCell: UITableViewCell {
     ) {
         idLabel.text = id
         valueLabel.text = "\(slot.value ?? "nil") (\(String(describing: slot.type)))"
-        containerLabel.text = "\(slot.storage.count)"
+        storageLabel.text = "\(slot.storage.count)"
         descriptionLabel.text = slot.description
         
         descriptionLabel.isHidden = slot.description == nil
@@ -156,12 +153,12 @@ final class SlotListTableViewCell: UITableViewCell {
         
         [valueTitleLabel, valueLabel].forEach { valueStackView.addArrangedSubview($0) }
         
-        [containerTitleLabel, containerLabel].forEach { containerStackView.addArrangedSubview($0) }
+        [storageTitleLabel, storageLabel].forEach { storageStackView.addArrangedSubview($0) }
         
         [
             idStackView,
             valueStackView,
-            containerStackView,
+            storageStackView,
             descriptionLabel
         ].forEach {
             contentStackView.addArrangedSubview($0)

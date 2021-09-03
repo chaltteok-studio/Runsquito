@@ -144,7 +144,7 @@ extension SlotDetailViewController: UITableViewDataSource {
                 fatalError("Fail to dequeue cell for identifier: \(identifier)")
             }
             
-            cell.configure(value: slot.value)
+            cell.configure(value: slot.value, isEditable: slot.isEditable)
             
             return cell
             

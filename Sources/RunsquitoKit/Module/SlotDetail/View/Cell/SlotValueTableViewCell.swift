@@ -62,8 +62,11 @@ final class SlotValueTableViewCell: UITableViewCell {
     }
     
     // MARK: - Public
-    func configure(value: Any?) {
+    func configure(value: Any?, isEditable: Bool) {
         valueLabel.text = "\(value ?? "nil")"
+
+        isUserInteractionEnabled = isEditable
+        arrowButton.isHidden = !isEditable
     }
     
     // MARK: - Private

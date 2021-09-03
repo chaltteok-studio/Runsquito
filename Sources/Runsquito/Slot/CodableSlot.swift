@@ -7,7 +7,7 @@
 
 import Foundation
 
-open class CodableSlot<Value>: Slot where Value: Codable {
+open class CodableSlot<Value>: Slot, Editable where Value: Codable {
     // MARK: - Property
     public private(set) var value: Value?
     public private(set) var storage: [Key: AnyItem]

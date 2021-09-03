@@ -24,9 +24,4 @@ public protocol Slot {
     func remove(for key: Key)
     /// Set current value.
     func set(_ value: Value?) throws
-    
-    /// Return encoded `Data` from current value of slot.
-    func encode() throws -> Data?
-    /// Set decoded value from `Data`.
-    func decode(_ data: Data) throws
 }

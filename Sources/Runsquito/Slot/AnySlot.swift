@@ -8,8 +8,11 @@
 import Foundation
 
 /// Type erased `Slot`
-public struct AnySlot: Slot {
+public struct AnySlot: Slot, Editable {
     // MARK: - Property
+    private let _isEditable: () -> Bool
+    public var isEditable: Bool { _isEditable() }
+    
     private let _type: () -> Any.Type
     public var type: Any.Type { _type() }
     
@@ -28,6 +31,8 @@ public struct AnySlot: Slot {
     
     // MARK: - Initializer
     public init<S: Slot>(_ slot: S) {
+        self._isEditable = { (slot as? Editable) != nil }
+        
         self._type = { S.Value.self }
         
         self._description = { slot.description }
@@ -50,8 +55,14 @@ public struct AnySlot: Slot {
             
             try slot.set(value)
         }
-        self._encode = { try slot.encode() }
-        self._decode = { try slot.decode($0) }
+        self._encode = {
+            guard let editableSlot = slot as? Editable else { throw RunsquitoError.couldNotEdit }
+            return try editableSlot.encode()
+        }
+        self._decode = {
+            guard let editableSlot = slot as? Editable else { throw RunsquitoError.couldNotEdit }
+            try editableSlot.decode($0)
+        }
     }
     
     // MARK: - Public

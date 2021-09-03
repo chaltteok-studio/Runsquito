@@ -1,13 +1,13 @@
 //
-//  ParseableSlot.swift
+//  ValueSlot.swift
 //  Runsquito
 //
-//  Created by jsilver on 2021/08/29.
+//  Created by jsilver on 2021/09/03.
 //
 
 import Foundation
 
-open class ParseableSlot<Value>: Slot, Editable where Value: Parseable {
+open class ValueSlot<Value>: Slot {
     // MARK: - Prorperty
     public private(set) var value: Value?
     public private(set) var storage: [Key: AnyItem]
@@ -35,15 +35,6 @@ open class ParseableSlot<Value>: Slot, Editable where Value: Parseable {
     
     open func set(_ value: Value?) {
         self.value = value
-    }
-    
-    open func encode() throws -> Data? {
-        guard let value = value else { return nil }
-        return try Value.encode(value)
-    }
-    
-    open func decode(_ data: Data) throws {
-        value = try Value.decode(data)
     }
     
     // MARK: - Private

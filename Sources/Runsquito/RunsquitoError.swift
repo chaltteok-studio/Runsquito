@@ -11,6 +11,7 @@ enum RunsquitoError: LocalizedError {
     case keyDuplicate(Key)
     case slotNotFound(Key)
     case failToParse(Error?)
+    case couldNotEdit
     case typeMismatch
     
     var errorDescription: String? {
@@ -23,6 +24,9 @@ enum RunsquitoError: LocalizedError {
             
         case .failToParse:
             return "Fail to parse."
+            
+        case .couldNotEdit:
+            return "Slot couldn't eit."
             
         case .typeMismatch:
             return "fail to add because value's type doesn't match already added value."

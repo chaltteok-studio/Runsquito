@@ -14,9 +14,37 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Mocito"
-               BuildableName = "Mocito"
-               BlueprintName = "Mocito"
+               BlueprintIdentifier = "Runsquito"
+               BuildableName = "Runsquito"
+               BlueprintName = "Runsquito"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "RunsquitoKit"
+               BuildableName = "RunsquitoKit"
+               BlueprintName = "RunsquitoKit"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "RunsquitoTests"
+               BuildableName = "RunsquitoTests"
+               BlueprintName = "RunsquitoTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,16 +54,15 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MocitoTests"
-               BuildableName = "MocitoTests"
-               BlueprintName = "MocitoTests"
+               BlueprintIdentifier = "RunsquitoTests"
+               BuildableName = "RunsquitoTests"
+               BlueprintName = "RunsquitoTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -61,9 +88,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Mocito"
-            BuildableName = "Mocito"
-            BlueprintName = "Mocito"
+            BlueprintIdentifier = "Runsquito"
+            BuildableName = "Runsquito"
+            BlueprintName = "Runsquito"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

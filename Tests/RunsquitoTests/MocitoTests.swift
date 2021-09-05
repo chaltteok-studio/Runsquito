@@ -193,5 +193,61 @@ final class RunsquitoTests: XCTestCase {
         XCTAssertNotEqual(sut.value(Bool.self, for: slotKey), value)
     }
     
+    func test_that_value_encoded_when_value_encode() throws {
+        // MARK: Given
+        let slotKey = "runsquito-test-slot"
+        
+        try sut.addSlot(ParseableSlot<Bool>(), for: slotKey)
+        try sut.set(true, in: slotKey)
+        
+        // MARK: When
+        let data = try sut.encode(for: slotKey)
+        
+        // MARK: Then
+        XCTAssertNotNil(data)
+    }
+    
+    func test_that_value_does_not_encoded_when_slot_did_not_adapt_editable() throws {
+        // MARK: Given
+        let slotKey = "runsquito-test-slot"
+        
+        try sut.addSlot(ValueSlot<Bool>(), for: slotKey)
+        try sut.set(true, in: slotKey)
+        
+        // MARK: When
+        
+        // MARK: Then
+        XCTAssertThrowsError(try sut.encode(for: slotKey))
+    }
+    
+    func test_that_value_decoded_when_data_decode() throws {
+        // MARK: Given
+        let slotKey = "runsquito-test-slot"
+        
+        try sut.addSlot(ParseableSlot<Bool>(), for: slotKey)
+        
+        let data = try Bool.encode(true)
+        
+        // MARK: When
+        try sut.decode(data, for: slotKey)
+        
+        // MARK: Then
+        XCTAssertEqual(sut.value(Bool.self, for: slotKey), true)
+    }
+    
+    func test_that_value_does_not_decoded_when_slot_did_not_adapt_editable() throws {
+        // MARK: Given
+        let slotKey = "runsquito-test-slot"
+        
+        try sut.addSlot(ValueSlot<Bool>(), for: slotKey)
+        
+        let data = try Bool.encode(true)
+        
+        // MARK: When
+        
+        // MARK: Then
+        XCTAssertThrowsError(try sut.decode(data, for: slotKey))
+    }
+    
     // MARK: - Private
 }

@@ -8,7 +8,7 @@
 ### Swift Pacakge Manager
 ```swift
 dependencies: [
-    .package(name: "Runsquito", path: "https://github.com/chaltteok-studio/runsquito-ios", from: "1.0.0")
+    .package(name: "Runsquito", path: "https://github.com/chaltteok-studio/runsquito-ios", from: "1.1.0")
 ]
 ```
 
@@ -29,11 +29,11 @@ try Runsquito.default.addSlot(
 )
 ```
 
-And add items to serve preset of value.
+And add items to serve presets of value.
 
 ```swift
 try Runsquito.default.addItem(
-    Item(true, description: "Test slot value `true`."),
+    ValueItem(true, description: "Test slot value `true`."),
     for: "test-slot-true",
     in: "test-slot"
 )
@@ -45,7 +45,9 @@ try Runsquito.default.addItem(
 )
 ```
 
-Then the slot with key "test-slot" has items `true` ans `false`.
+Then the slot with key "test-slot" has items `true` and `false`.
+
+This work perform recommand once like `AppDelegate`.
 
 ⚠️ Point to note is `Type`. `Slot` and `Item` has the `Type` of value. So all operations of `Runsquito` perform validation.
 If you add or set value that it's type doesn't match to `Slot`, function throw `RunsquitoError.typeMismatch`.
@@ -57,7 +59,7 @@ Runquito.default.value(Bool.self, for: "test-slot")
 ```
 
 ### RunsquitoKit
-If you use `Runsquito` only programmatically, you only need import `Runsquito` module. and you can make your own UI. For your application's feature flags, test & QA helper, etc...
+If you use `Runsquito` only programmatically, you only need import `Runsquito` module. and you can make your own view. For your application's feature flags, test & QA helper, etc...
 
 If you need `Runsquito` value edit views, use `RunsquitoKit`.
 
@@ -84,7 +86,7 @@ It serve default features that manage `Runsquito`. like `Screenshot` section's G
 
   `ParseableSlot` is basic editable slot. It can handle `Parseable` adopt value of type.
   
-  `Parseable` protocol is for editing. It force implement two functions. `encode` & `decode`.
+  `Parseable` is protocol for editing. It force implement two functions. `encode` & `decode`.
   
   ```swift
   public protocol Parseable {

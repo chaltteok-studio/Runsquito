@@ -52,6 +52,14 @@ open class Runsquito {
         try slots[slotKey]?.set(value)
     }
     
+    open func encode(for key: Key) throws -> Data? {
+        try slots[key]?.encode()
+    }
+    
+    open func decode(_ data: Data, for key: Key) throws {
+        try slots[key]?.decode(data)
+    }
+    
     open func value<T>(for key: Key) -> T? {
         slots[key]?.value as? T
     }

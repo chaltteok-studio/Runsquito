@@ -16,7 +16,7 @@ public struct AnyItem: Item {
     public let description: String?
     
     // MARK: - Intializer
-    init<I: Item>(_ item: I) {
+    public init<I: Item>(_ item: I) {
         self.type = I.Value.self
         self.value = item.value
         self.description = item.description

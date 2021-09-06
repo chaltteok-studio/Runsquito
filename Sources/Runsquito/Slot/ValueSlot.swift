@@ -9,8 +9,8 @@ import Foundation
 
 open class ValueSlot<Value>: Slot {
     // MARK: - Prorperty
-    public private(set) var value: Value?
-    public private(set) var storage: [Key: AnyItem]
+    open private(set) var value: Value?
+    open private(set) var storage: [Key: AnyItem]
     public let description: String?
     
     // MARK: - Initializer

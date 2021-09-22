@@ -19,9 +19,15 @@ public protocol Slot {
     var description: String? { get }
     
     /// Add item into storage.
-    func add<I: Item>(_ item: I, for key: Key) throws where I.Value == Value
+    func updateItem<I: Item>(_ item: I, forKey key: Key) throws where I.Value == Value
     /// Remove item for key from storage.
-    func remove(for key: Key)
+    func removeItem(forKey key: Key)
     /// Set current value.
-    func set(_ value: Value?) throws
+    func setValue(_ value: Value?) throws
+}
+
+extension Slot {
+    func eraseToAnySlot() -> AnySlot {
+        AnySlot(self)
+    }
 }

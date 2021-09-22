@@ -8,6 +8,6 @@
 import Foundation
 
 public protocol Parseable {
-    static func encode(_ value: Self) throws -> Data
-    static func decode(_ data: Data) throws -> Self
+    func encode() throws -> Data
+    static func decode(from data: Data) throws -> Self
 }

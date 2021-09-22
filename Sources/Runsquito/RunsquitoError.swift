@@ -26,7 +26,7 @@ enum RunsquitoError: LocalizedError {
             return "Fail to parse."
             
         case .couldNotEdit:
-            return "Slot couldn't eit."
+            return "Slot couldn't edit."
             
         case .typeMismatch:
             return "fail to add because value's type doesn't match already added value."

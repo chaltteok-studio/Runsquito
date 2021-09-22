@@ -8,81 +8,83 @@
 import Foundation
 
 /// Type erased `Slot`
-public struct AnySlot: Slot, Editable {
+public class AnySlot: EditableSlot {
     // MARK: - Property
-    private let _isEditable: () -> Bool
-    public var isEditable: Bool { _isEditable() }
-    
-    private let _type: () -> Any.Type
-    public var type: Any.Type { _type() }
+    public var type: Any.Type
     
     private let _value: () -> Any?
     public var value: Any? { _value() }
+    
     private let _storage: () -> [Key: AnyItem]
     public var storage: [Key: AnyItem] { _storage() }
+    
     private let _description: () -> String?
     public var description: String? { _description() }
     
-    private let _add: (AnyItem, Key) throws -> Void
-    private let _remove: (Key) -> Void
-    private let _set: (Any?) throws -> Void
+    private let _updateItem: (AnyItem, Key) throws -> Void
+    private let _removeItem: (Key) -> Void
+    private let _setValue: (Any?) throws -> Void
     private let _encode: () throws -> Data?
     private let _decode: (Data) throws -> Void
     
     // MARK: - Initializer
-    public init<S: Slot>(_ slot: S) {
-        self._isEditable = { (slot as? Editable) != nil }
-        
-        self._type = { S.Value.self }
+    public init<S>(
+        _ slot: S,
+        encode: (() throws -> Data?)? = nil,
+        decode: ((Data) throws -> Void)? = nil
+    ) where S: Slot {
+        type = S.Value.self
         
         self._description = { slot.description }
         self._value = { slot.value }
         self._storage = { slot.storage.mapValues { AnyItem($0) } }
         
-        self._add = {
+        self._updateItem = {
             guard let value = $0.value as? S.Value else { throw RunsquitoError.typeMismatch }
             
-            try slot.add(ValueItem(value, description: $0.description), for:$1)
+            try slot.updateItem(ValueItem(value, description: $0.description), forKey: $1)
         }
-        self._remove = { slot.remove(for: $0) }
-        self._set =  {
+        self._removeItem = { slot.removeItem(forKey: $0) }
+        self._setValue =  {
             guard $0 != nil else {
-                try slot.set(nil)
+                try slot.setValue(nil)
                 return
             }
             
             guard let value = $0 as? S.Value else { throw RunsquitoError.typeMismatch }
             
-            try slot.set(value)
+            try slot.setValue(value)
         }
-        self._encode = {
-            guard let editableSlot = slot as? Editable else { throw RunsquitoError.couldNotEdit }
-            return try editableSlot.encode()
-        }
-        self._decode = {
-            guard let editableSlot = slot as? Editable else { throw RunsquitoError.couldNotEdit }
-            try editableSlot.decode($0)
+        self._encode = encode ?? { throw RunsquitoError.couldNotEdit }
+        self._decode = decode ?? { _ in throw RunsquitoError.couldNotEdit }
+    }
+    
+    public convenience init<S>(editable slot: S) where S: EditableSlot {
+        self.init(slot) {
+            try slot.encode()
+        } decode: {
+            try slot.decode(from: $0)
         }
     }
     
     // MARK: - Public
-    public func add<I: Item>(_ item: I, for key: Key) throws where I.Value == Any {
-        try _add(AnyItem(item), key)
+    public func updateItem<I: Item>(_ item: I, forKey key: Key) throws where I.Value == Any {
+        try _updateItem(AnyItem(item), key)
     }
     
-    public func remove(for key: Key) {
-        _remove(key)
+    public func removeItem(forKey key: Key) {
+        _removeItem(key)
     }
     
-    public func set(_ value: Any?) throws {
-        try _set(value)
+    public func setValue(_ value: Any?) throws {
+        try _setValue(value)
     }
     
     public func encode() throws -> Data? {
         try _encode()
     }
     
-    public func decode(_ data: Data) throws {
+    public func decode(from data: Data) throws {
         try _decode(data)
     }
     

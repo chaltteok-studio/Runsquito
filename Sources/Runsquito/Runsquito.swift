@@ -26,46 +26,51 @@ open class Runsquito {
     }
     
     // MARK: - Public
-    open func addSlot<S: Slot>(_ slot: S, for key: Key) throws {
+    open func addSlot<S>(_ slot: S, forKey key: Key) throws where S: Slot {
         guard slots[key] == nil else { throw RunsquitoError.keyDuplicate(key) }
-        slots[key] = AnySlot(slot)
+        slots[key] = slot.eraseToAnySlot()
     }
     
-    open func addItem<I: Item>(_ item: I, for key: Key, in slotKey: Key) throws {
+    open func addSlot<S>(_ slot: S, forKey key: Key) throws where S: EditableSlot {
+        guard slots[key] == nil else { throw RunsquitoError.keyDuplicate(key) }
+        slots[key] = slot.eraseToAnySlot()
+    }
+    
+    open func updateItem<I: Item>(_ item: I, forKey key: Key, inSlotKey slotKey: Key) throws {
         guard let slot = slots[slotKey] else { throw RunsquitoError.slotNotFound(slotKey) }
-        try slot.add(AnyItem(item), for: key)
+        try slot.updateItem(item.eraseToAnyItem(), forKey: key)
     }
     
-    open func removeSlot(for key: Key) {
+    open func removeSlot(forKey key: Key) {
         slots[key] = nil
     }
     
-    open func removeItem(for key: Key, in slotKey: Key) {
-        slots[slotKey]?.remove(for: key)
+    open func removeItem(forKey key: Key, inSlotKey slotKey: Key) {
+        slots[slotKey]?.removeItem(forKey: key)
     }
     
-    open func removeAll() {
+    open func removeAllSlots() {
         slots.removeAll()
     }
     
-    open func set<Value>(_ value: Value?, in slotKey: Key) throws {
-        try slots[slotKey]?.set(value)
+    open func setValue<Value>(_ value: Value?, forKey key: Key) throws {
+        try slots[key]?.setValue(value)
     }
     
-    open func encode(for key: Key) throws -> Data? {
+    open func encode(forKey key: Key) throws -> Data? {
         try slots[key]?.encode()
     }
     
-    open func decode(_ data: Data, for key: Key) throws {
-        try slots[key]?.decode(data)
+    open func decode(_ data: Data, forKey key: Key) throws {
+        try slots[key]?.decode(from: data)
     }
     
-    open func value<T>(for key: Key) -> T? {
+    open func value<T>(forKey key: Key) -> T? {
         slots[key]?.value as? T
     }
     
-    open func value<T>(_ type: T.Type, for key: Key) -> T? {
-        value(for: key)
+    open func value<T>(_ type: T.Type, forKey key: Key) -> T? {
+        value(forKey: key)
     }
     
     // MARK: - Private

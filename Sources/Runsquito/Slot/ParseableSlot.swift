@@ -7,7 +7,7 @@
 
 import Foundation
 
-open class ParseableSlot<Value>: ValueSlot<Value>, Editable where Value: Parseable {
+open class ParseableSlot<Value>: ValueSlot<Value>, EditableSlot where Value: Parseable {
     // MARK: - Prorperty
     
     // MARK: - Initializer
@@ -15,11 +15,11 @@ open class ParseableSlot<Value>: ValueSlot<Value>, Editable where Value: Parseab
     // MARK: - Public
     open func encode() throws -> Data? {
         guard let value = value else { return nil }
-        return try Value.encode(value)
+        return try value.encode()
     }
     
-    open func decode(_ data: Data) throws {
-        set(try Value.decode(data))
+    open func decode(from data: Data) throws {
+        setValue(try Value.decode(from: data))
     }
     
     // MARK: - Private

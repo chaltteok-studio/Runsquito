@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FileItem<Value>: Item {
+public struct FileItem<Value>: Item {
     // MARK: - Property
     public let value: Value
     public let description: String?

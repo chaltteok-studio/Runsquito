@@ -10,7 +10,8 @@ import Foundation
 /// Type erased `Slot`
 public class AnySlot: EditableSlot {
     // MARK: - Property
-    public var type: Any.Type
+    public let type: Any.Type
+    public let isEditable: Bool
     
     private let _value: () -> Any?
     public var value: Any? { _value() }
@@ -30,10 +31,12 @@ public class AnySlot: EditableSlot {
     // MARK: - Initializer
     public init<S>(
         _ slot: S,
-        encode: (() throws -> Data?)? = nil,
-        decode: ((Data) throws -> Void)? = nil
+        isEditable: Bool = false,
+        encode: @escaping () throws -> Data? = { throw RunsquitoError.couldNotEdit },
+        decode: @escaping (Data) throws -> Void = { _ in throw RunsquitoError.couldNotEdit }
     ) where S: Slot {
         type = S.Value.self
+        self.isEditable = isEditable
         
         self._description = { slot.description }
         self._value = { slot.value }
@@ -55,12 +58,15 @@ public class AnySlot: EditableSlot {
             
             try slot.setValue(value)
         }
-        self._encode = encode ?? { throw RunsquitoError.couldNotEdit }
-        self._decode = decode ?? { _ in throw RunsquitoError.couldNotEdit }
+        self._encode = encode
+        self._decode = decode
     }
     
     public convenience init<S>(editable slot: S) where S: EditableSlot {
-        self.init(slot) {
+        self.init(
+            slot,
+            isEditable: true
+        ) {
             try slot.encode()
         } decode: {
             try slot.decode(from: $0)

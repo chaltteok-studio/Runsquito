@@ -59,13 +59,13 @@ final class ValueEditView: UIView {
               let keyboardRect = (userInfo[keyboardFrameKey] as? NSValue)?.cgRectValue else { return }
         
         let targetRect = convert(bounds, to: window)
-        let intersectRect = targetRect.intersection(keyboardRect)
+        let _ = targetRect.intersection(keyboardRect)
         
         // TODO:
     }
     
     @objc private func keyboardHideShow(_ sender: NSNotification) {
-        //
+        // TODO:
     }
     
     // MARK: - Public

@@ -118,7 +118,7 @@ final class SlotDetailViewController: UIViewController {
 
 extension SlotDetailViewController: SlotResetTableViewHeaderFooterViewDelegate {
     func reset() {
-        try? slot.set(nil)
+        try? slot.setValue(nil)
         
         tableView.reloadData()
     }
@@ -196,7 +196,7 @@ extension SlotDetailViewController: UITableViewDelegate {
             navigationController?.pushViewController(viewController, animated: true)
             
         case let .item(_, item):
-            try? slot.set(item.value)
+            try? slot.setValue(item.value)
             tableView.reloadData()
             
             delegate?.valueChanged()

@@ -53,7 +53,7 @@ final class ValueEditViewController: UIViewController {
         guard let data = textView.text.data(using: .utf8) else { return }
         
         do {
-            try slot.decode(data)
+            try slot.decode(from: data)
             
             delegate?.edited()
         } catch {

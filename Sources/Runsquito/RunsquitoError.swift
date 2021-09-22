@@ -7,14 +7,14 @@
 
 import Foundation
 
-enum RunsquitoError: LocalizedError {
+public enum RunsquitoError: LocalizedError {
     case keyDuplicate(Key)
     case slotNotFound(Key)
     case failToParse(Error?)
     case couldNotEdit
     case typeMismatch
     
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case let .keyDuplicate(key):
             return "Add duplicated key(\"\(key)\")."

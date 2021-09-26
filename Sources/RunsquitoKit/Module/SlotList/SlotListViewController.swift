@@ -28,13 +28,13 @@ final class SlotListViewController: UIViewController {
     private var query: String = ""
     private var items: [(Key, AnySlot)] {
         Runsquito.default.slots
-            .sorted { $0.key < $1.key }
             .filter { key, _ in
                 let query = query.trimmingCharacters(in: .whitespaces)
                 guard !query.isEmpty else { return true }
                 
                 return key.contains(query)
             }
+            .sorted(by: \.key)
             .map { ($0, $1) }
     }
     

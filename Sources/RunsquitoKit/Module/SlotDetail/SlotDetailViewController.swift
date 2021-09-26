@@ -37,7 +37,7 @@ final class SlotDetailViewController: UIViewController {
     
     enum CellType {
         case value
-        case item(Key, AnyItem)
+        case item((Key, AnyItem))
     }
     
     // MARK: - View
@@ -60,14 +60,14 @@ final class SlotDetailViewController: UIViewController {
             SlotDetailSectionModel(
                 section: .item,
                 items: slot.storage
-                    .sorted { $0.key < $1.key }
                     .filter { key, _ in
                         let query = query.trimmingCharacters(in: .whitespaces)
                         guard !query.isEmpty else { return true }
                         
                         return key.contains(query)
                     }
-                    .map { .item($0, $1) }
+                    .sorted(by: \.key)
+                    .map { .item($0) }
             )
         ]
             .filter { !$0.items.isEmpty }
@@ -148,14 +148,14 @@ extension SlotDetailViewController: UITableViewDataSource {
             
             return cell
             
-        case let .item(key, item):
+        case let .item(value):
             let identifier = String(describing: SlotDetailTableViewCell.self)
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotDetailTableViewCell else {
                 fatalError("Fail to dequeue cell for identifier: \(identifier)")
             }
             
-            cell.configure(id: key, item: item)
+            cell.configure(value: value)
             
             return cell
         }
@@ -195,7 +195,8 @@ extension SlotDetailViewController: UITableViewDelegate {
             
             navigationController?.pushViewController(viewController, animated: true)
             
-        case let .item(_, item):
+        case let .item(value):
+            let (_, item) = value
             try? slot.setValue(item.value)
             tableView.reloadData()
             

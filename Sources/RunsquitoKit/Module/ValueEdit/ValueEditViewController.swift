@@ -50,7 +50,8 @@ final class ValueEditViewController: UIViewController {
     
     // MARK: - Action
     @objc private func saveTap(_ sender: UIButton) {
-        guard let data = textView.text.data(using: .utf8) else { return }
+        let text = textView.text.replacingOccurrences(of: "[“”]", with: "\"", options: [.regularExpression], range: nil)
+        guard let data = text.data(using: .utf8) else { return }
         
         do {
             try slot.decode(from: data)

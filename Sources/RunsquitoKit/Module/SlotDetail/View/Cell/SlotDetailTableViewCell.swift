@@ -106,15 +106,12 @@ final class SlotDetailTableViewCell: UITableViewCell {
     }
     
     // MARK: - Public
-    func configure(
-        id: String,
-        item: AnyItem
-    ) {
-        idLabel.text = id
-        valueLabel.text = "\(item.value)"
-        descriptionLabel.text = item.description
+    func configure(value: (key: String, item: AnyItem)) {
+        idLabel.text = value.key
+        valueLabel.text = "\(value.item.value)"
+        descriptionLabel.text = value.item.description
         
-        descriptionLabel.isHidden = item.description == nil
+        descriptionLabel.isHidden = value.item.description == nil
     }
     
     // MARK: - Private

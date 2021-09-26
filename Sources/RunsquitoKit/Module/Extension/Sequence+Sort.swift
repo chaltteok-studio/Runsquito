@@ -1,6 +1,6 @@
 //
-//  Array+Sort.swift
-//  
+//  Sequence+Sort.swift
+//  RunsquitoKit
 //
 //  Created by jsilver on 2021/09/26.
 //

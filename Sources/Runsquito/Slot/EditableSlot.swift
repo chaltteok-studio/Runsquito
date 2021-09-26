@@ -11,7 +11,7 @@ public protocol EditableSlot: Slot {
     /// Return encoded `Data` from current value of slot.
     func encode() throws -> Data?
     /// Set decoded value from `Data`.
-    func decode(from data: Data) throws
+    func decode(from data: Data) throws -> Value
 }
 
 extension EditableSlot {

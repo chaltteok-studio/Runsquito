@@ -26,14 +26,14 @@ public class AnySlot: EditableSlot {
     private let _removeItem: (Key) -> Void
     private let _setValue: (Any?) throws -> Void
     private let _encode: () throws -> Data?
-    private let _decode: (Data) throws -> Void
+    private let _decode: (Data) throws -> Any
     
     // MARK: - Initializer
     public init<S>(
         _ slot: S,
         isEditable: Bool = false,
         encode: @escaping () throws -> Data? = { throw RunsquitoError.couldNotEdit },
-        decode: @escaping (Data) throws -> Void = { _ in throw RunsquitoError.couldNotEdit }
+        decode: @escaping (Data) throws -> Any = { _ in throw RunsquitoError.couldNotEdit }
     ) where S: Slot {
         type = S.Value.self
         self.isEditable = isEditable
@@ -90,7 +90,7 @@ public class AnySlot: EditableSlot {
         try _encode()
     }
     
-    public func decode(from data: Data) throws {
+    public func decode(from data: Data) throws -> Any {
         try _decode(data)
     }
     

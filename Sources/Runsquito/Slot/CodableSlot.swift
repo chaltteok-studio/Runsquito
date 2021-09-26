@@ -22,11 +22,10 @@ open class CodableSlot<Value>: ValueSlot<Value>, EditableSlot where Value: Codab
         return try encoder.encode(value)
     }
     
-    open func decode(from data: Data) throws {
+    open func decode(from data: Data) throws -> Value {
         let decoder = JSONDecoder()
-        let value = try decoder.decode(Value.self, from: data)
         
-        setValue(value)
+        return try decoder.decode(Value.self, from: data)
     }
     
     // MARK: - Private

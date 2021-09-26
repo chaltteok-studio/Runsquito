@@ -18,8 +18,8 @@ open class ParseableSlot<Value>: ValueSlot<Value>, EditableSlot where Value: Par
         return try value.encode()
     }
     
-    open func decode(from data: Data) throws {
-        setValue(try Value.decode(from: data))
+    open func decode(from data: Data) throws -> Value {
+        return try Value.decode(from: data)
     }
     
     // MARK: - Private

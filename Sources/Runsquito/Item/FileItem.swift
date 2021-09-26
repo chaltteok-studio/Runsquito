@@ -13,10 +13,10 @@ public struct FileItem<Value>: Item {
     public let description: String?
     
     // MARK: - Initializer
-    public init?(description: String? = nil, fileName: String, ext: String, in bundle: Bundle = .main) where Value: Decodable {
+    public init?(description: String? = nil, fileName: String, in bundle: Bundle = .main) where Value: Decodable {
         let decoder = JSONDecoder()
         
-        guard let url = bundle.url(forResource: fileName, withExtension: ext),
+        guard let url = bundle.url(forResource: fileName, withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let value = try? decoder.decode(Value.self, from: data) else { return nil }
         

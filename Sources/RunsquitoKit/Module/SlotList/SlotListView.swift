@@ -16,6 +16,7 @@ final class SlotListView: UIView {
         view.autocapitalizationType = .none
         view.autocorrectionType = .no
         view.searchBarStyle = .minimal
+        view.placeholder = "search_placeholder".localized
         
         return view
     }()
@@ -29,7 +30,7 @@ final class SlotListView: UIView {
         let view = UITableView(frame: .zero, style: .grouped)
         
         // Cell register
-        view.register(SlotListTableViewCell.self, forCellReuseIdentifier: String(describing: SlotListTableViewCell.self))
+        view.register(SlotListTableViewCell.self, forCellReuseIdentifier: SlotListTableViewCell.name)
         
         return view
     }()
@@ -39,7 +40,7 @@ final class SlotListView: UIView {
         view.layer.cornerRadius = 14
         view.backgroundColor = view.tintColor
         view.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        view.setTitle("Close", for: .normal)
+        view.setTitle("close_title".localized, for: .normal)
         view.setTitleColor(.white, for: .normal)
         
         return view
@@ -67,6 +68,7 @@ final class SlotListView: UIView {
     // MARK: - Private
     private func commonInit() {
         setUpComponent()
+        setUpAction()
         setUpLayout()
     }
     
@@ -78,6 +80,10 @@ final class SlotListView: UIView {
         }
         
         tableView.tableHeaderView = headerContainerView
+    }
+    
+    private func setUpAction() {
+        
     }
     
     private func setUpLayout() {

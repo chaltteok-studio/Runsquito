@@ -9,7 +9,7 @@ import UIKit
 import Runsquito
 
 protocol SlotResetTableViewHeaderFooterViewDelegate: AnyObject {
-    func reset()
+    func headerFooterViewDidReset(_ view: SlotResetTableViewHeaderFooterView)
 }
 
 final class SlotResetTableViewHeaderFooterView: UITableViewHeaderFooterView {
@@ -20,7 +20,7 @@ final class SlotResetTableViewHeaderFooterView: UITableViewHeaderFooterView {
         view.layer.borderColor = UIColor.gray.cgColor
         view.layer.borderWidth = 1
         view.titleLabel?.font = .systemFont(ofSize: 14)
-        view.setTitle("Reset", for: .normal)
+        view.setTitle("reset_title".localized, for: .normal)
         view.setTitleColor(.gray, for: .normal)
         
         return view
@@ -75,6 +75,6 @@ final class SlotResetTableViewHeaderFooterView: UITableViewHeaderFooterView {
     }
     
     @objc private func resetTap(_ sender: UIButton) {
-        delegate?.reset()
+        delegate?.headerFooterViewDidReset(self)
     }
 }

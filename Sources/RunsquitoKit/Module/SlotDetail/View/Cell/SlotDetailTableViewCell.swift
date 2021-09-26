@@ -15,7 +15,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
         view.font = .systemFont(ofSize: 14)
-        view.text = "ID"
+        view.text = "key_title".localized
         
         return view
     }()
@@ -42,7 +42,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
         view.font = .systemFont(ofSize: 14)
-        view.text = "Value"
+        view.text = "value_title".localized
         
         return view
     }()

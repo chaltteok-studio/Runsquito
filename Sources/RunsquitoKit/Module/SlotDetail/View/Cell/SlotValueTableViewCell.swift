@@ -13,6 +13,7 @@ final class SlotValueTableViewCell: UITableViewCell {
     private let valueLabel: UILabel = {
         let view = UILabel()
         view.font = .systemFont(ofSize: 14)
+        view.numberOfLines = 3
         
         return view
     }()

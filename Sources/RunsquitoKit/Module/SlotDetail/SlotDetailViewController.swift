@@ -8,13 +8,8 @@
 import UIKit
 import Runsquito
 
-struct SectionModel<Section, Item> {
-    let section: Section
-    let items: [Item]
-}
-
 protocol SlotDetailViewControllerDelegate: AnyObject {
-    func valueChanged()
+    func viewControllerDidChange(_ viewController: SlotDetailViewController)
 }
 
 final class SlotDetailViewController: UIViewController {
@@ -27,10 +22,10 @@ final class SlotDetailViewController: UIViewController {
         var title: String {
             switch self {
             case .value:
-                return "CURRENT VALUE"
+                return "current_value_title".localized
                 
             case .item:
-                return "STORAGE"
+                return "storage_title".localized
             }
         }
     }
@@ -117,7 +112,7 @@ final class SlotDetailViewController: UIViewController {
 }
 
 extension SlotDetailViewController: SlotResetTableViewHeaderFooterViewDelegate {
-    func reset() {
+    func headerFooterViewDidReset(_ view: SlotResetTableViewHeaderFooterView) {
         try? slot.setValue(nil)
         
         tableView.reloadData()
@@ -138,7 +133,7 @@ extension SlotDetailViewController: UITableViewDataSource {
         
         switch item {
         case .value:
-            let identifier = String(describing: SlotValueTableViewCell.self)
+            let identifier = SlotValueTableViewCell.name
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotValueTableViewCell else {
                 fatalError("Fail to dequeue cell for identifier: \(identifier)")
@@ -149,7 +144,7 @@ extension SlotDetailViewController: UITableViewDataSource {
             return cell
             
         case let .item(value):
-            let identifier = String(describing: SlotDetailTableViewCell.self)
+            let identifier = SlotDetailTableViewCell.name
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotDetailTableViewCell else {
                 fatalError("Fail to dequeue cell for identifier: \(identifier)")
@@ -170,7 +165,7 @@ extension SlotDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard section == tableView.numberOfSections - 1 else { return nil }
         
-        let identifier = String(describing: SlotResetTableViewHeaderFooterView.self)
+        let identifier = SlotResetTableViewHeaderFooterView.name
         
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as? SlotResetTableViewHeaderFooterView else {
             fatalError("Fail to dequeue header for identifier: \(identifier)")
@@ -200,7 +195,7 @@ extension SlotDetailViewController: UITableViewDelegate {
             try? slot.setValue(item.value)
             tableView.reloadData()
             
-            delegate?.valueChanged()
+            delegate?.viewControllerDidChange(self)
         }
     }
     
@@ -221,10 +216,10 @@ extension SlotDetailViewController: UISearchBarDelegate {
 }
 
 extension SlotDetailViewController: ValueEditViewControllerDelegate {
-    func edited() {
+    func viewControllerDidChange(_ viewController: ValueEditViewController) {
         tableView.reloadData()
         
-        delegate?.valueChanged()
+        delegate?.viewControllerDidChange(self)
         navigationController?.popViewController(animated: true)
     }
 }

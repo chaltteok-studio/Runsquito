@@ -70,7 +70,7 @@ final class SlotListViewController: UIViewController {
     
     // MARK: - Private
     private func setUpComponent() {
-        title = "Runsquito"
+        title = "title".localized
         
         searchBar.delegate = self
         
@@ -93,7 +93,7 @@ extension SlotListViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = String(describing: SlotListTableViewCell.self)
+        let identifier = SlotListTableViewCell.name
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotListTableViewCell else {
             fatalError("Fail to dequeue cell for identifier: \(identifier)")
@@ -127,7 +127,7 @@ extension SlotListViewController: UITableViewDelegate {
 }
 
 extension SlotListViewController: SlotDetailViewControllerDelegate {
-    func valueChanged() {
+    func viewControllerDidChange(_ viewController: SlotDetailViewController) {
         tableView.reloadData()
     }
 }

@@ -10,16 +10,16 @@ import Runsquito
 
 final class SlotListTableViewCell: UITableViewCell {
     // MARK: - View
-    private let idTitleLabel: UILabel = {
+    private let keyTitleLabel: UILabel = {
         let view = UILabel()
         view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         view.font = .systemFont(ofSize: 14)
-        view.text = "ID"
+        view.text = "key_title".localized
         
         return view
     }()
     
-    private let idLabel: UILabel = {
+    private let keyLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .right
         view.textColor = .gray
@@ -28,7 +28,7 @@ final class SlotListTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let idStackView: UIStackView = {
+    private let keyStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
         view.spacing = 8
@@ -40,7 +40,7 @@ final class SlotListTableViewCell: UITableViewCell {
         let view = UILabel()
         view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         view.font = .systemFont(ofSize: 14)
-        view.text = "Value"
+        view.text = "value_title".localized
         
         return view
     }()
@@ -66,7 +66,7 @@ final class SlotListTableViewCell: UITableViewCell {
         let view = UILabel()
         view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         view.font = .systemFont(ofSize: 14)
-        view.text = "Storage"
+        view.text = "storage_title".localized
         
         return view
     }()
@@ -122,7 +122,7 @@ final class SlotListTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        idLabel.text = nil
+        keyLabel.text = nil
         valueLabel.text = nil
         storageLabel.text = nil
         descriptionLabel.text = nil
@@ -135,7 +135,7 @@ final class SlotListTableViewCell: UITableViewCell {
         id: String,
         slot: AnySlot
     ) {
-        idLabel.text = id
+        keyLabel.text = id
         valueLabel.text = "\(slot.value ?? "nil") (\(String(describing: slot.type)))"
         storageLabel.text = "\(slot.storage.count)"
         descriptionLabel.text = slot.description
@@ -149,14 +149,14 @@ final class SlotListTableViewCell: UITableViewCell {
     }
     
     private func setUpLayout() {
-        [idTitleLabel, idLabel].forEach { idStackView.addArrangedSubview($0) }
+        [keyTitleLabel, keyLabel].forEach { keyStackView.addArrangedSubview($0) }
         
         [valueTitleLabel, valueLabel].forEach { valueStackView.addArrangedSubview($0) }
         
         [storageTitleLabel, storageLabel].forEach { storageStackView.addArrangedSubview($0) }
         
         [
-            idStackView,
+            keyStackView,
             valueStackView,
             storageStackView,
             descriptionLabel

@@ -16,6 +16,7 @@ final class SlotDetailView: UIView {
         view.autocapitalizationType = .none
         view.autocorrectionType = .no
         view.searchBarStyle = .minimal
+        view.placeholder = "search_placeholder".localized
         
         return view
     }()
@@ -29,11 +30,11 @@ final class SlotDetailView: UIView {
         let view = UITableView(frame: .zero, style: .grouped)
         
         // Header & Footer register
-        view.register(SlotResetTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: String(describing: SlotResetTableViewHeaderFooterView.self))
+        view.register(SlotResetTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SlotResetTableViewHeaderFooterView.name)
         
         // Cell register
-        view.register(SlotValueTableViewCell.self, forCellReuseIdentifier: String(describing: SlotValueTableViewCell.self))
-        view.register(SlotDetailTableViewCell.self, forCellReuseIdentifier: String(describing: SlotDetailTableViewCell.self))
+        view.register(SlotValueTableViewCell.self, forCellReuseIdentifier: SlotValueTableViewCell.name)
+        view.register(SlotDetailTableViewCell.self, forCellReuseIdentifier: SlotDetailTableViewCell.name)
         
         return view
     }()

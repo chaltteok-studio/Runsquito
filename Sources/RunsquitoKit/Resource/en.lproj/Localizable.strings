@@ -1,0 +1,15 @@
+// MARK: - Common
+"title" = "Runsquito";
+"key_title" = "Key";
+"value_title" = "Value";
+"current_value_title" = "Current Value";
+"storage_title" = "Storage";
+"error_title" = "Something went wrong!";
+"alert_confirm_title" = "Confirm";
+"close_title" = "Close";
+"reset_title" = "Reset";
+"edit_title" = "Edit";
+"update_title" = "Update";
+"add_title" = "Add";
+"search_placeholder" = "Search...";
+"key_placeholder" = "input-key";

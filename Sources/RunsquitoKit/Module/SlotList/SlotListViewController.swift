@@ -9,7 +9,7 @@ import UIKit
 import Runsquito
 
 protocol SlotListViewControllerDelegate: AnyObject {
-    func close()
+    func viewControllerCloseButtonClicked(_ viewController: SlotListViewController)
 }
 
 final class SlotListViewController: UIViewController {
@@ -63,7 +63,7 @@ final class SlotListViewController: UIViewController {
     
     // MARK: - Action
     @objc private func closeTap(_ sender: UIButton) {
-        delegate?.close()
+        delegate?.viewControllerCloseButtonClicked(self)
     }
     
     // MARK: - Public
@@ -101,7 +101,7 @@ extension SlotListViewController: UITableViewDataSource {
         
         let (key, slot) = items[indexPath.item]
         
-        cell.configure(id: key, slot: slot)
+        cell.configure(key: key, slot: slot)
         
         return cell
     }

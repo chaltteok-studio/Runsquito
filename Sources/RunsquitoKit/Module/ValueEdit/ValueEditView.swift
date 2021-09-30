@@ -13,10 +13,9 @@ final class ValueEditView: UIView {
         let view = UITableView(frame: .zero, style: .grouped)
         
         // Cell register
-        view.register(ValueUpdateTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: ValueUpdateTableViewHeaderFooterView.name)
-        
         view.register(ValueEditTableViewCell.self, forCellReuseIdentifier: ValueEditTableViewCell.name)
         view.register(ValueUpdateKeyTableViewCell.self, forCellReuseIdentifier: ValueUpdateKeyTableViewCell.name)
+        view.register(ValueUpdateTableViewCell.self, forCellReuseIdentifier: ValueUpdateTableViewCell.name)
         
         return view
     }()

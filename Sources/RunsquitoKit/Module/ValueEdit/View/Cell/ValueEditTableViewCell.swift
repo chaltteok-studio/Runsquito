@@ -20,7 +20,12 @@ final class ValueEditTableViewCell: UITableViewCell {
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonTap(_:)))
+        let doneButton = UIBarButtonItem(
+            title: "done_title".localized,
+            style: .done,
+            target: self,
+            action: #selector(doneButtonTap(_:))
+        )
         
         view.items = [spacer, doneButton]
 
@@ -32,7 +37,7 @@ final class ValueEditTableViewCell: UITableViewCell {
         view.autocapitalizationType = .none
         view.autocorrectionType = .no
         view.backgroundColor = .clear
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 16)
         
         return view
     }()
@@ -102,9 +107,9 @@ final class ValueEditTableViewCell: UITableViewCell {
         textViewHeightConstraint.priority = .defaultHigh
         
         NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12.5),
             textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12.5),
             textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             textViewHeightConstraint
         ])

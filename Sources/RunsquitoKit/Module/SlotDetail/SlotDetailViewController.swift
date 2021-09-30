@@ -18,14 +18,18 @@ final class SlotDetailViewController: UIViewController {
     enum SectionType {
         case value
         case item
+        case action
         
-        var title: String {
+        var title: String? {
             switch self {
             case .value:
-                return "current_value_title".localized
+                return "slot_detail_current_value_title".localized
                 
             case .item:
-                return "storage_title".localized
+                return "slot_detail_storage_title".localized
+                
+            case .action:
+                return nil
             }
         }
     }
@@ -33,6 +37,7 @@ final class SlotDetailViewController: UIViewController {
     enum CellType {
         case value
         case item((Key, AnyItem))
+        case reset
     }
     
     // MARK: - View
@@ -63,6 +68,10 @@ final class SlotDetailViewController: UIViewController {
                     }
                     .sorted(by: \.key)
                     .map { .item($0) }
+            ),
+            SlotDetailSectionModel(
+                section: .action,
+                items: [.reset]
             )
         ]
             .filter { !$0.items.isEmpty }
@@ -111,14 +120,6 @@ final class SlotDetailViewController: UIViewController {
     }
 }
 
-extension SlotDetailViewController: SlotResetTableViewHeaderFooterViewDelegate {
-    func headerFooterViewDidReset(_ view: SlotResetTableViewHeaderFooterView) {
-        try? slot.setValue(nil)
-        
-        tableView.reloadData()
-    }
-}
-
 extension SlotDetailViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         items.count
@@ -153,6 +154,15 @@ extension SlotDetailViewController: UITableViewDataSource {
             cell.configure(value: value)
             
             return cell
+            
+        case .reset:
+            let identifier = SlotResetTableViewCell.name
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotResetTableViewCell else {
+                fatalError("Fail to dequeue cell for identifier: \(identifier)")
+            }
+            
+            return cell
         }
     }
 }
@@ -160,20 +170,6 @@ extension SlotDetailViewController: UITableViewDataSource {
 extension SlotDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         items[section].section.title
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard section == tableView.numberOfSections - 1 else { return nil }
-        
-        let identifier = SlotResetTableViewHeaderFooterView.name
-        
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as? SlotResetTableViewHeaderFooterView else {
-            fatalError("Fail to dequeue header for identifier: \(identifier)")
-        }
-        
-        view.delegate = self
-        
-        return view
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -196,6 +192,11 @@ extension SlotDetailViewController: UITableViewDelegate {
             tableView.reloadData()
             
             delegate?.viewControllerDidChange(self)
+            
+        case .reset:
+            try? slot.setValue(nil)
+            
+            tableView.reloadData()
         }
     }
     

@@ -10,29 +10,29 @@ import Runsquito
 
 final class SlotDetailTableViewCell: UITableViewCell {
     // MARK: - View
-    private let idTitleLabel: UILabel = {
+    private let keyTitleLabel: UILabel = {
         let view = UILabel()
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.font = .systemFont(ofSize: 14)
-        view.text = "key_title".localized
+        view.font = .systemFont(ofSize: 16)
+        view.text = "slot_detail_key_title".localized
         
         return view
     }()
     
-    private let idLabel: UILabel = {
+    private let keyLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .right
         view.textColor = .gray
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 16)
         
         return view
     }()
     
-    private let idStackView: UIStackView = {
+    private let keyStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
-        view.spacing = 8
+        view.spacing = 16
         
         return view
     }()
@@ -41,8 +41,8 @@ final class SlotDetailTableViewCell: UITableViewCell {
         let view = UILabel()
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.font = .systemFont(ofSize: 14)
-        view.text = "value_title".localized
+        view.font = .systemFont(ofSize: 16)
+        view.text = "slot_detail_value_title".localized
         
         return view
     }()
@@ -51,7 +51,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
         let view = UILabel()
         view.textAlignment = .right
         view.textColor = .gray
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 16)
         
         return view
     }()
@@ -59,7 +59,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     private let valueStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
-        view.spacing = 8
+        view.spacing = 16
         
         return view
     }()
@@ -68,7 +68,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
         let view = UILabel()
         view.numberOfLines = 0
         view.textColor = .gray
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 16)
         
         return view
     }()
@@ -76,7 +76,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     private let contentStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
-        view.spacing = 4
+        view.spacing = 6
         
         return view
     }()
@@ -98,7 +98,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        idLabel.text = nil
+        keyLabel.text = nil
         valueLabel.text = nil
         descriptionLabel.text = nil
         
@@ -107,7 +107,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     
     // MARK: - Public
     func configure(value: (key: String, item: AnyItem)) {
-        idLabel.text = value.key
+        keyLabel.text = value.key
         valueLabel.text = "\(value.item.value)"
         descriptionLabel.text = value.item.description
         
@@ -120,12 +120,12 @@ final class SlotDetailTableViewCell: UITableViewCell {
     }
     
     private func setUpLayout() {
-        [idTitleLabel, idLabel].forEach { idStackView.addArrangedSubview($0) }
+        [keyTitleLabel, keyLabel].forEach { keyStackView.addArrangedSubview($0) }
         
         [valueTitleLabel, valueLabel].forEach { valueStackView.addArrangedSubview($0) }
         
         [
-            idStackView,
+            keyStackView,
             valueStackView,
             descriptionLabel
         ].forEach {
@@ -138,9 +138,9 @@ final class SlotDetailTableViewCell: UITableViewCell {
         }
         
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12.5),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12.5),
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24)
         ])
     }

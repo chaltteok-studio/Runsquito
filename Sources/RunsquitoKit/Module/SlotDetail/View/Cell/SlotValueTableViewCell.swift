@@ -12,7 +12,7 @@ final class SlotValueTableViewCell: UITableViewCell {
     // MARK: - View
     private let valueLabel: UILabel = {
         let view = UILabel()
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 16)
         view.numberOfLines = 3
         
         return view
@@ -30,14 +30,6 @@ final class SlotValueTableViewCell: UITableViewCell {
         let view = UIStackView()
         view.axis = .horizontal
         view.spacing = 8
-        
-        return view
-    }()
-    
-    private let contentStackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .vertical
-        view.spacing = 4
         
         return view
     }()
@@ -83,22 +75,16 @@ final class SlotValueTableViewCell: UITableViewCell {
             valueStackView.addArrangedSubview($0)
         }
         
-        [
-            valueStackView
-        ].forEach {
-            contentStackView.addArrangedSubview($0)
-        }
-        
-        [contentStackView].forEach {
+        [valueStackView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
         
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24)
+            valueStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12.5),
+            valueStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            valueStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12.5),
+            valueStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24)
         ])
     }
 }

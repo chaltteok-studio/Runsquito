@@ -28,13 +28,11 @@ final class SlotDetailView: UIView {
     
     let tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .grouped)
-        
-        // Header & Footer register
-        view.register(SlotResetTableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SlotResetTableViewHeaderFooterView.name)
-        
+                
         // Cell register
         view.register(SlotValueTableViewCell.self, forCellReuseIdentifier: SlotValueTableViewCell.name)
         view.register(SlotDetailTableViewCell.self, forCellReuseIdentifier: SlotDetailTableViewCell.name)
+        view.register(SlotResetTableViewCell.self, forCellReuseIdentifier: SlotResetTableViewCell.name)
         
         return view
     }()

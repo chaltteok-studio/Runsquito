@@ -16,16 +16,16 @@ final class ValueEditViewController: UIViewController {
     typealias ValueEditSectionModel = SectionModel<SectionType, CellType>
     
     enum SectionType: Int {
-        case edit = 0
+        case edit
         case update
         
         var title: String {
             switch self {
             case .edit:
-                return "edit_title".localized
+                return "value_edit_edit_title".localized
                 
             case .update:
-                return "update_title".localized
+                return "value_edit_update_title".localized
             }
         }
     }
@@ -33,6 +33,7 @@ final class ValueEditViewController: UIViewController {
     enum CellType {
         case edit(String)
         case key(String)
+        case update
     }
     
     // MARK: - View
@@ -47,7 +48,13 @@ final class ValueEditViewController: UIViewController {
     private var dataSource: [ValueEditSectionModel] {
         [
             .init(section: .edit, items: [.edit(text)]),
-            .init(section: .update, items: [.key(updateKey)])
+            .init(
+                section: .update,
+                items: [
+                    .key(updateKey),
+                    .update
+                ]
+            )
         ]
     }
     
@@ -154,24 +161,16 @@ extension ValueEditViewController: ValueUpdateKeyTableViewCellDelegate {
     func cellDidChange(_ cell: ValueUpdateKeyTableViewCell) {
         updateKey = cell.text ?? ""
         
-        // Update footer view
-        guard let view = tableView.footerView(forSection: SectionType.update.rawValue) as? ValueUpdateTableViewHeaderFooterView else { return }
-        
-        view.configure(
-            key: updateKey,
-            exists: !slot.storage
-                .filter { key, _ in key == updateKey }
-                .isEmpty
+        // Update action
+        tableView.reloadRows(
+            at: tableView.indexPathsForVisibleRows?
+                .filter {
+                    let item = dataSource[$0.section].items[$0.item]
+                    guard case .update = item else { return false }
+                    return true
+                } ?? [],
+            with: .none
         )
-    }
-}
-
-extension ValueEditViewController: ValueUpdateTableViewHeaderFooterViewDelegate {
-    func headerFooterViewTappedUpdate(_ view: ValueUpdateTableViewHeaderFooterView) {
-        guard let value = decode() else { return }
-        
-        try? slot.updateItem(ValueItem<Any>(value), forKey: updateKey)
-        delegate?.viewControllerDidChange(self)
     }
 }
 
@@ -200,7 +199,7 @@ extension ValueEditViewController: UITableViewDataSource {
             
             return cell
             
-        case let .key(id):
+        case let .key(key):
             let identifier = ValueUpdateKeyTableViewCell.name
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ValueUpdateKeyTableViewCell else {
@@ -208,7 +207,23 @@ extension ValueEditViewController: UITableViewDataSource {
             }
             
             cell.delegate = self
-            cell.text = id
+            cell.text = key
+            
+            return cell
+            
+        case .update:
+            let identifier = ValueUpdateTableViewCell.name
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ValueUpdateTableViewCell else {
+                fatalError("Fail to dequeue header for identifier: \(identifier)")
+            }
+            
+            cell.configure(
+                key: updateKey,
+                exists: !slot.storage
+                    .filter { key, _ in key == updateKey }
+                    .isEmpty
+            )
             
             return cell
         }
@@ -220,23 +235,14 @@ extension ValueEditViewController: UITableViewDelegate {
         dataSource[section].section.title
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard SectionType(rawValue: section) == .update else { return nil }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        let identifier = ValueUpdateTableViewHeaderFooterView.name
+        guard case .update = dataSource[indexPath.section].items[indexPath.item] else { return }
         
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as? ValueUpdateTableViewHeaderFooterView else {
-            fatalError("Fail to dequeue header for identifier: \(identifier)")
-        }
+        guard let value = decode() else { return }
         
-        view.configure(
-            key: updateKey,
-            exists: !slot.storage
-                .filter { key, _ in key == updateKey }
-                .isEmpty
-        )
-        view.delegate = self
-        
-        return view
+        try? slot.updateItem(ValueItem<Any>(value), forKey: updateKey)
+        delegate?.viewControllerDidChange(self)
     }
 }

@@ -20,7 +20,12 @@ final class ValueUpdateKeyTableViewCell: UITableViewCell {
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonTap(_:)))
+        let doneButton = UIBarButtonItem(
+            title: "done_title".localized,
+            style: .done,
+            target: self,
+            action: #selector(doneButtonTap(_:))
+        )
         
         view.items = [spacer, doneButton]
 
@@ -31,20 +36,20 @@ final class ValueUpdateKeyTableViewCell: UITableViewCell {
         let view = UILabel()
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.font = .systemFont(ofSize: 14)
-        view.text = "ID"
+        view.font = .systemFont(ofSize: 16)
+        view.text = "value_edit_key_title".localized
         
         return view
     }()
     
-    private let textField: UITextField = {
+    let textField: UITextField = {
         let view = UITextField()
         view.autocapitalizationType = .none
         view.autocorrectionType = .no
         view.backgroundColor = .clear
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 16)
         view.textAlignment = .right
-        view.placeholder = "key_placeholder".localized
+        view.placeholder = "value_edit_key_placeholder".localized
         
         return view
     }()
@@ -52,10 +57,17 @@ final class ValueUpdateKeyTableViewCell: UITableViewCell {
     private let contentStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
-        view.spacing = 8
+        view.spacing = 16
         
         return view
     }()
+    
+    override var intrinsicContentSize: CGSize {
+        var size = super.intrinsicContentSize
+        size.height = max(size.height, 38)
+        
+        return size
+    }
     
     // MARK: - Property
     var text: String? {
@@ -118,16 +130,14 @@ final class ValueUpdateKeyTableViewCell: UITableViewCell {
     private func setUpLayout() {
         [titleLabel, textField].forEach { contentStackView.addArrangedSubview($0) }
         
-        
         [contentStackView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
         
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            contentStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24)
         ])
     }

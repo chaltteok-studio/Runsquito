@@ -1,15 +1,29 @@
 // MARK: - Common
 "title" = "Runsquito";
-"key_title" = "Key";
-"value_title" = "Value";
-"current_value_title" = "Current Value";
-"storage_title" = "Storage";
-"error_title" = "Something went wrong!";
-"alert_confirm_title" = "Confirm";
 "close_title" = "Close";
-"reset_title" = "Reset";
-"edit_title" = "Edit";
-"update_title" = "Update";
-"add_title" = "Add";
+"done_title" = "Done";
+"error_title" = "Something went wrong!";
 "search_placeholder" = "Search...";
-"key_placeholder" = "input-key";
+
+// MARK: - Alert
+"alert_confirm_title" = "Confirm";
+
+// MARK: - Slot List
+"slot_list_key_title" = "Key";
+"slot_list_value_title" = "Value";
+"slot_list_storage_title" = "Storage";
+
+// MARK: - Slot Detail
+"slot_detail_current_value_title" = "Current Value";
+"slot_detail_storage_title" = "Storage";
+"slot_detail_key_title" = "Key";
+"slot_detail_value_title" = "Value";
+"slot_detail_reset_title" = "Reset Current Value";
+
+// MARK: - Value Edit
+"value_edit_edit_title" = "Edit";
+"value_edit_update_title" = "Update";
+"value_edit_key_title" = "Key";
+"value_edit_add_item_title" = "Add Item";
+"value_edit_update_item_title" = "Update Item";
+"value_edit_key_placeholder" = "input item key";

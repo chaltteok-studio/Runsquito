@@ -7,6 +7,7 @@
 
 import UIKit
 import Runsquito
+import JSToast
 
 protocol SlotDetailViewControllerDelegate: AnyObject {
     func viewControllerDidChange(_ viewController: SlotDetailViewController)
@@ -100,6 +101,7 @@ final class SlotDetailViewController: UIViewController {
         super.viewDidLoad()
         
         setUpComponent()
+        setUpAction()
         setUpLayout()
     }
     
@@ -115,8 +117,22 @@ final class SlotDetailViewController: UIViewController {
         tableView.dataSource = self
     }
     
+    private func setUpAction() {
+        
+    }
+    
     private func setUpLayout() {
         
+    }
+    
+    private func showToast(title: String) {
+        Toaster.shared.showToast(
+            Toast(ToastView(title: title)),
+            withDuration: 2,
+            at: [.inside(of: .top), .center(of: .x)],
+            show: .slideIn(duration: 0.3, direction: .down),
+            hide: .fadeOut(duration: 0.3)
+        )
     }
 }
 
@@ -197,6 +213,8 @@ extension SlotDetailViewController: UITableViewDelegate {
             try? slot.setValue(nil)
             
             tableView.reloadData()
+            
+            showToast(title: "slot_detail_reset_taost_title".localized)
         }
     }
     
@@ -221,6 +239,5 @@ extension SlotDetailViewController: ValueEditViewControllerDelegate {
         tableView.reloadData()
         
         delegate?.viewControllerDidChange(self)
-        navigationController?.popViewController(animated: true)
     }
 }

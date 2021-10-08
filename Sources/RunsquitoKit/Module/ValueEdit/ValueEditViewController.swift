@@ -7,6 +7,7 @@
 
 import UIKit
 import Runsquito
+import JSToast
 
 protocol ValueEditViewControllerDelegate: AnyObject {
     func viewControllerDidChange(_ viewController: ValueEditViewController)
@@ -149,6 +150,16 @@ final class ValueEditViewController: UIViewController {
         
         present(viewController, animated: true, completion: nil)
     }
+    
+    private func showToast(title: String) {
+        Toaster.shared.showToast(
+            Toast(ToastView(title: title)),
+            withDuration: 2,
+            at: [.inside(of: .top), .center(of: .x)],
+            show: .slideIn(duration: 0.3, direction: .down),
+            hide: .fadeOut(duration: 0.3)
+        )
+    }
 }
 
 extension ValueEditViewController: ValueEditTableViewCellDelegate {
@@ -242,7 +253,20 @@ extension ValueEditViewController: UITableViewDelegate {
         
         guard let value = decode() else { return }
         
+        let exists = !slot.storage
+            .filter { key, _ in key == updateKey }
+            .isEmpty
+        
         try? slot.updateItem(ValueItem<Any>(value), forKey: updateKey)
+        
+        tableView.reloadData()
+        
+        showToast(
+            title: exists
+            ? "value_edit_update_item_toast_title".localized
+            : "value_edit_add_item_toast_title".localized
+        )
+        
         delegate?.viewControllerDidChange(self)
     }
 }

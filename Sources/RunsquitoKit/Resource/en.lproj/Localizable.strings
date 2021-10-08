@@ -19,6 +19,7 @@
 "slot_detail_key_title" = "Key";
 "slot_detail_value_title" = "Value";
 "slot_detail_reset_title" = "Reset Current Value";
+"slot_detail_reset_taost_title" = "Current value reset.";
 
 // MARK: - Value Edit
 "value_edit_edit_title" = "Edit";
@@ -27,3 +28,5 @@
 "value_edit_add_item_title" = "Add Item";
 "value_edit_update_item_title" = "Update Item";
 "value_edit_key_placeholder" = "input item key";
+"value_edit_add_item_toast_title" = "Item added!";
+"value_edit_update_item_toast_title" = "Item updated!";

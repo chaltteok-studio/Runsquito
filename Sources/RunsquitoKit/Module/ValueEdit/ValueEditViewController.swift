@@ -10,7 +10,8 @@ import Runsquito
 import JSToast
 
 protocol ValueEditViewControllerDelegate: AnyObject {
-    func viewControllerDidChange(_ viewController: ValueEditViewController)
+    func viewController(_ viewController: ValueEditViewController, valueDidChange value: Any)
+    func viewController(_ viewController: ValueEditViewController, itemDidUpdate item: AnyItem)
 }
 
 final class ValueEditViewController: UIViewController {
@@ -99,7 +100,7 @@ final class ValueEditViewController: UIViewController {
         guard let value = decode() else { return }
         
         try? slot.setValue(value)
-        delegate?.viewControllerDidChange(self)
+        delegate?.viewController(self, valueDidChange: value)
     }
     
     // MARK: - Public
@@ -257,7 +258,9 @@ extension ValueEditViewController: UITableViewDelegate {
             .filter { key, _ in key == updateKey }
             .isEmpty
         
-        try? slot.updateItem(ValueItem<Any>(value), forKey: updateKey)
+        let item = AnyItem(ValueItem<Any>(value))
+        
+        try? slot.updateItem(item, forKey: updateKey)
         
         tableView.reloadData()
         
@@ -267,6 +270,6 @@ extension ValueEditViewController: UITableViewDelegate {
             : "value_edit_add_item_toast_title".localized
         )
         
-        delegate?.viewControllerDidChange(self)
+        delegate?.viewController(self, itemDidUpdate: item)
     }
 }

@@ -235,7 +235,15 @@ extension SlotDetailViewController: UISearchBarDelegate {
 }
 
 extension SlotDetailViewController: ValueEditViewControllerDelegate {
-    func viewControllerDidChange(_ viewController: ValueEditViewController) {
+    func viewController(_ viewController: ValueEditViewController, valueDidChange value: Any) {
+        tableView.reloadData()
+        
+        delegate?.viewControllerDidChange(self)
+        
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func viewController(_ viewController: ValueEditViewController, itemDidUpdate item: AnyItem) {
         tableView.reloadData()
         
         delegate?.viewControllerDidChange(self)

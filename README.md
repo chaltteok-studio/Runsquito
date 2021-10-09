@@ -4,7 +4,7 @@
 You can get help with implementation like a/b testing controller, develop & qa test helper etc...
 
 # Screenshot
-<img src="https://i.imgur.com/sHPBnr2.gif" width=260 />
+<img src="https://user-images.githubusercontent.com/11141077/136648173-b2f87701-03ac-4bfa-a74f-cbdf5d770468.gif" width=260 />
 
 # Installation
 ### Swift Pacakge Manager

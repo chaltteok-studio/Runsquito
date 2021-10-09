@@ -14,17 +14,17 @@ final class AnySlotTests: XCTestCase {
     
     // MARK: - Lifecycle
     override func setUp() {
-        slot = .init(ParseableSlot<Bool>(description: "Slot for unit test. value type is Boolean."))
+        slot = .init(editable: ParseableSlot<Bool>(description: "Slot for unit test. value type is Boolean."))
     }
     
     // MARK: - Test
-    func test_that_item_is_added_into_storage_when_item_add() throws {
+    func test_that_item_is_added_into_storage_when_item_updateItem() throws {
         // MARK: Given
         let key = "test-item"
         let item: ValueItem<Any> = ValueItem(true)
         
         // MARK: When
-        try slot.add(item, for: key)
+        try slot.updateItem(item, forKey: key)
         
         // MARK: Then
         XCTAssertNotNil(slot.storage[key])
@@ -38,7 +38,7 @@ final class AnySlotTests: XCTestCase {
         // MARK: When
         
         // MARK: Then
-        XCTAssertThrowsError(try slot.add(item, for: key))
+        XCTAssertThrowsError(try slot.updateItem(item, forKey: key))
     }
     
     func test_that_item_is_removed_from_storage_when_item_remove() throws {
@@ -46,10 +46,10 @@ final class AnySlotTests: XCTestCase {
         let key = "test-item"
         let item: ValueItem<Any> = ValueItem(true)
         
-        try slot.add(item, for: key)
+        try slot.updateItem(item, forKey: key)
         
         // MARK: When
-        slot.remove(for: key)
+        slot.removeItem(forKey: key)
         
         // MARK: Then
         XCTAssertNil(slot.storage[key])
@@ -60,7 +60,7 @@ final class AnySlotTests: XCTestCase {
         let value = true
         
         // MARK: When
-        try slot.set(value)
+        try slot.setValue(value)
         
         // MARK: Then
         XCTAssertEqual(slot.value as? Bool, value)
@@ -73,16 +73,16 @@ final class AnySlotTests: XCTestCase {
         // MARK: When
         
         // MARK: Then
-        XCTAssertThrowsError(try slot.set(value))
+        XCTAssertThrowsError(try slot.setValue(value))
     }
     
     func test_that_value_is_set_nil_when_value_set_nil() throws {
         // MARK: Given
         let value = true
-        try slot.set(value)
+        try slot.setValue(value)
         
         // MARK: When
-        try slot.set(nil)
+        try slot.setValue(nil)
         
         // MARK: Then
         XCTAssertNil(slot.value)
@@ -92,7 +92,7 @@ final class AnySlotTests: XCTestCase {
         // MARK: Given
         let value = true
         
-        try slot.set(value)
+        try slot.setValue(value)
         
         // MARK: When
         let encodedData = try? slot.encode()
@@ -114,10 +114,10 @@ final class AnySlotTests: XCTestCase {
     func test_that_slot_is_set_decoded_data_when_decode() throws {
         // MARK: Given
         let value = true
-        let data = try Bool.encode(value)
+        let data = try value.encode()
         
         // MARK: When
-        try slot.decode(data)
+        try slot.decode(from: data)
         
         // MARK: Then
         XCTAssertEqual(slot.value as? Bool, value)
@@ -126,12 +126,12 @@ final class AnySlotTests: XCTestCase {
     func test_that_slot_is_not_set_decoded_data_when_decode_fail() throws {
         // MARK: Given
         let value = 10
-        let data = try Int.encode(value)
+        let data = try value.encode()
         
         // MARK: When
         
         // MARK: Then
-        XCTAssertThrowsError(try slot.decode(data))
+        XCTAssertThrowsError(try slot.decode(from: data))
     }
     
     // MARK: - Private

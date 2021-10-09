@@ -10,28 +10,28 @@ import Runsquito
 
 final class SlotListTableViewCell: UITableViewCell {
     // MARK: - View
-    private let idTitleLabel: UILabel = {
+    private let keyTitleLabel: UILabel = {
         let view = UILabel()
         view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        view.font = .systemFont(ofSize: 14)
-        view.text = "ID"
+        view.font = .systemFont(ofSize: 16)
+        view.text = "slot_list_key_title".localized
         
         return view
     }()
     
-    private let idLabel: UILabel = {
+    private let keyLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .right
         view.textColor = .gray
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 16)
         
         return view
     }()
     
-    private let idStackView: UIStackView = {
+    private let keyStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
-        view.spacing = 8
+        view.spacing = 16
         
         return view
     }()
@@ -39,8 +39,8 @@ final class SlotListTableViewCell: UITableViewCell {
     private let valueTitleLabel: UILabel = {
         let view = UILabel()
         view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        view.font = .systemFont(ofSize: 14)
-        view.text = "Value"
+        view.font = .systemFont(ofSize: 16)
+        view.text = "slot_list_value_title".localized
         
         return view
     }()
@@ -49,7 +49,7 @@ final class SlotListTableViewCell: UITableViewCell {
         let view = UILabel()
         view.textAlignment = .right
         view.textColor = .gray
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 16)
         
         return view
     }()
@@ -57,7 +57,7 @@ final class SlotListTableViewCell: UITableViewCell {
     private let valueStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
-        view.spacing = 8
+        view.spacing = 16
         
         return view
     }()
@@ -65,8 +65,8 @@ final class SlotListTableViewCell: UITableViewCell {
     private let storageTitleLabel: UILabel = {
         let view = UILabel()
         view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        view.font = .systemFont(ofSize: 14)
-        view.text = "Storage"
+        view.font = .systemFont(ofSize: 16)
+        view.text = "slot_list_storage_title".localized
         
         return view
     }()
@@ -75,7 +75,7 @@ final class SlotListTableViewCell: UITableViewCell {
         let view = UILabel()
         view.textAlignment = .right
         view.textColor = .gray
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 16)
         
         return view
     }()
@@ -83,7 +83,7 @@ final class SlotListTableViewCell: UITableViewCell {
     private let storageStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
-        view.spacing = 8
+        view.spacing = 16
         
         return view
     }()
@@ -92,7 +92,7 @@ final class SlotListTableViewCell: UITableViewCell {
         let view = UILabel()
         view.numberOfLines = 0
         view.textColor = .gray
-        view.font = .systemFont(ofSize: 14)
+        view.font = .systemFont(ofSize: 16)
         
         return view
     }()
@@ -100,7 +100,7 @@ final class SlotListTableViewCell: UITableViewCell {
     private let contentStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
-        view.spacing = 4
+        view.spacing = 6
         
         return view
     }()
@@ -122,7 +122,7 @@ final class SlotListTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        idLabel.text = nil
+        keyLabel.text = nil
         valueLabel.text = nil
         storageLabel.text = nil
         descriptionLabel.text = nil
@@ -132,10 +132,10 @@ final class SlotListTableViewCell: UITableViewCell {
     
     // MARK: - Public
     func configure(
-        id: String,
+        key: String,
         slot: AnySlot
     ) {
-        idLabel.text = id
+        keyLabel.text = key
         valueLabel.text = "\(slot.value ?? "nil") (\(String(describing: slot.type)))"
         storageLabel.text = "\(slot.storage.count)"
         descriptionLabel.text = slot.description
@@ -149,14 +149,14 @@ final class SlotListTableViewCell: UITableViewCell {
     }
     
     private func setUpLayout() {
-        [idTitleLabel, idLabel].forEach { idStackView.addArrangedSubview($0) }
+        [keyTitleLabel, keyLabel].forEach { keyStackView.addArrangedSubview($0) }
         
         [valueTitleLabel, valueLabel].forEach { valueStackView.addArrangedSubview($0) }
         
         [storageTitleLabel, storageLabel].forEach { storageStackView.addArrangedSubview($0) }
         
         [
-            idStackView,
+            keyStackView,
             valueStackView,
             storageStackView,
             descriptionLabel
@@ -170,9 +170,9 @@ final class SlotListTableViewCell: UITableViewCell {
         }
         
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12.5),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12.5),
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24)
         ])
     }

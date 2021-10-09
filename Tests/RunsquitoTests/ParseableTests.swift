@@ -19,7 +19,7 @@ final class ParseableTests: XCTestCase {
         let value = 10
         
         // MARK: When
-        let data = try Int.encode(value)
+        let data = try value.encode()
         
         // MARK: Then
         XCTAssertNotNil(data)
@@ -33,7 +33,7 @@ final class ParseableTests: XCTestCase {
         }
         
         // MARK: When
-        let value = try Int.decode(data)
+        let value = try Int.decode(from: data)
         
         // MARK: Then
         XCTAssertEqual(value, 10)
@@ -49,7 +49,7 @@ final class ParseableTests: XCTestCase {
         // MARK: When
         
         // MARK: Then
-        XCTAssertThrowsError(try Int.decode(data))
+        XCTAssertThrowsError(try Int.decode(from: data))
     }
     
     func test_float_parseable_encode() throws {
@@ -57,7 +57,7 @@ final class ParseableTests: XCTestCase {
         let value: Float = 10.0
         
         // MARK: When
-        let data = try Float.encode(value)
+        let data = try value.encode()
         
         // MARK: Then
         XCTAssertNotNil(data)
@@ -71,7 +71,7 @@ final class ParseableTests: XCTestCase {
         }
         
         // MARK: When
-        let value = try Float.decode(data)
+        let value = try Float.decode(from: data)
         
         // MARK: Then
         XCTAssertEqual(value, 10.0)
@@ -87,7 +87,7 @@ final class ParseableTests: XCTestCase {
         // MARK: When
         
         // MARK: Then
-        XCTAssertThrowsError(try Float.decode(data))
+        XCTAssertThrowsError(try Float.decode(from: data))
     }
     
     func test_double_parseable_encode() throws {
@@ -95,7 +95,7 @@ final class ParseableTests: XCTestCase {
         let value: Double = 10.0
         
         // MARK: When
-        let data = try Double.encode(value)
+        let data = try value.encode()
         
         // MARK: Then
         XCTAssertNotNil(data)
@@ -109,7 +109,7 @@ final class ParseableTests: XCTestCase {
         }
         
         // MARK: When
-        let value = try Double.decode(data)
+        let value = try Double.decode(from: data)
         
         // MARK: Then
         XCTAssertEqual(value, 10.0)
@@ -125,7 +125,7 @@ final class ParseableTests: XCTestCase {
         // MARK: When
         
         // MARK: Then
-        XCTAssertThrowsError(try Double.decode(data))
+        XCTAssertThrowsError(try Double.decode(from: data))
     }
     
     func test_bool_parseable_encode() throws {
@@ -133,7 +133,7 @@ final class ParseableTests: XCTestCase {
         let value = true
         
         // MARK: When
-        let data = try Bool.encode(value)
+        let data = try value.encode()
         
         // MARK: Then
         XCTAssertNotNil(data)
@@ -147,7 +147,7 @@ final class ParseableTests: XCTestCase {
         }
         
         // MARK: When
-        let value = try Bool.decode(data)
+        let value = try Bool.decode(from: data)
         
         // MARK: Then
         XCTAssertEqual(value, true)
@@ -163,7 +163,7 @@ final class ParseableTests: XCTestCase {
         // MARK: When
         
         // MARK: Then
-        XCTAssertThrowsError(try Bool.decode(data))
+        XCTAssertThrowsError(try Bool.decode(from: data))
     }
     
     func test_string_parseable_encode() throws {
@@ -171,7 +171,7 @@ final class ParseableTests: XCTestCase {
         let value = "runsquito"
         
         // MARK: When
-        let data = try String.encode(value)
+        let data = try value.encode()
         
         // MARK: Then
         XCTAssertNotNil(data)
@@ -185,7 +185,7 @@ final class ParseableTests: XCTestCase {
         }
         
         // MARK: When
-        let value = try String.decode(data)
+        let value = try String.decode(from: data)
         
         // MARK: Then
         XCTAssertEqual(value, "runsquito")

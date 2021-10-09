@@ -9,25 +9,13 @@ import UIKit
 
 final class ValueEditView: UIView {
     // MARK: - View
-    private let keyboardAccessoryView: UIToolbar = {
-        let view = UIToolbar()
-        view.sizeToFit()
+    let tableView: UITableView = {
+        let view = UITableView(frame: .zero, style: .grouped)
         
-        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        
-        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonTap(_:)))
-        
-        view.items = [spacer, doneButton]
-
-        return view
-    }()
-    
-    let textView: UITextView = {
-        let view = UITextView()
-        view.autocapitalizationType = .none
-        view.autocorrectionType = .no
-        view.backgroundColor = .clear
-        view.font = .systemFont(ofSize: 14)
+        // Cell register
+        view.register(ValueEditTableViewCell.self, forCellReuseIdentifier: ValueEditTableViewCell.name)
+        view.register(ValueUpdateKeyTableViewCell.self, forCellReuseIdentifier: ValueUpdateKeyTableViewCell.name)
+        view.register(ValueUpdateTableViewCell.self, forCellReuseIdentifier: ValueUpdateTableViewCell.name)
         
         return view
     }()
@@ -48,10 +36,6 @@ final class ValueEditView: UIView {
     // MARK: - Lifecycle
     
     // MARK: - Action
-    @objc private func doneButtonTap(_ sender: UIBarButtonItem) {
-        textView.endEditing(true)
-    }
-    
     @objc private func keyboardWillShow(_ sender: NSNotification) {
         let keyboardFrameKey = UIResponder.keyboardFrameEndUserInfoKey
         
@@ -59,13 +43,13 @@ final class ValueEditView: UIView {
               let keyboardRect = (userInfo[keyboardFrameKey] as? NSValue)?.cgRectValue else { return }
         
         let targetRect = convert(bounds, to: window)
-        let intersectRect = targetRect.intersection(keyboardRect)
+        let rect = targetRect.intersection(keyboardRect)
         
-        // TODO:
+        tableView.contentInset.bottom = rect.height
     }
     
     @objc private func keyboardHideShow(_ sender: NSNotification) {
-        //
+        tableView.contentInset.bottom = .zero
     }
     
     // MARK: - Public
@@ -73,8 +57,8 @@ final class ValueEditView: UIView {
     // MARK: - Private
     private func commonInit() {
         setUpComponent()
-        setUpLayout()
         setUpAction()
+        setUpLayout()
     }
     
     private func setUpComponent() {
@@ -83,22 +67,6 @@ final class ValueEditView: UIView {
         } else {
             backgroundColor = .groupTableViewBackground
         }
-        
-        textView.inputAccessoryView = keyboardAccessoryView
-    }
-    
-    private func setUpLayout() {
-        [textView].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
-        }
-        
-        NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
-            textView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -24),
-            textView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            textView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 24)
-        ])
     }
     
     private func setUpAction() {
@@ -115,5 +83,19 @@ final class ValueEditView: UIView {
             name: UIResponder.keyboardWillHideNotification,
             object: nil
         )
+    }
+    
+    private func setUpLayout() {
+        [tableView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            addSubview($0)
+        }
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            tableView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor)
+        ])
     }
 }

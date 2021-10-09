@@ -1,0 +1,32 @@
+// MARK: - Common
+"title" = "Runsquito";
+"close_title" = "Close";
+"done_title" = "Done";
+"error_title" = "Something went wrong!";
+"search_placeholder" = "Search...";
+
+// MARK: - Alert
+"alert_confirm_title" = "Confirm";
+
+// MARK: - Slot List
+"slot_list_key_title" = "Key";
+"slot_list_value_title" = "Value";
+"slot_list_storage_title" = "Storage";
+
+// MARK: - Slot Detail
+"slot_detail_current_value_title" = "Current Value";
+"slot_detail_storage_title" = "Storage";
+"slot_detail_key_title" = "Key";
+"slot_detail_value_title" = "Value";
+"slot_detail_reset_title" = "Reset Current Value";
+"slot_detail_reset_taost_title" = "Current value reset.";
+
+// MARK: - Value Edit
+"value_edit_edit_title" = "Edit";
+"value_edit_update_title" = "Update";
+"value_edit_key_title" = "Key";
+"value_edit_add_item_title" = "Add Item";
+"value_edit_update_item_title" = "Update Item";
+"value_edit_key_placeholder" = "input item key";
+"value_edit_add_item_toast_title" = "Item added!";
+"value_edit_update_item_toast_title" = "Item updated!";

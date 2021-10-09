@@ -8,12 +8,12 @@
 import Foundation
 
 extension Int: Parseable {
-    public static func encode(_ value: Int) throws -> Data {
-        guard let data = String(value).data(using: .utf8) else { throw RunsquitoError.failToParse(nil) }
+    public func encode() throws -> Data {
+        guard let data = String(self).data(using: .utf8) else { throw RunsquitoError.failToParse(nil) }
         return data
     }
     
-    public static func decode(_ data: Data) throws -> Int {
+    public static func decode(from data: Data) throws -> Int {
         guard let string = String(data: data, encoding: .utf8),
               let value = Int(string) else { throw RunsquitoError.failToParse(nil) }
         return value
@@ -21,12 +21,12 @@ extension Int: Parseable {
 }
 
 extension Float: Parseable {
-    public static func encode(_ value: Float) throws -> Data {
-        guard let data = String(value).data(using: .utf8) else { throw RunsquitoError.failToParse(nil) }
+    public func encode() throws -> Data {
+        guard let data = String(self).data(using: .utf8) else { throw RunsquitoError.failToParse(nil) }
         return data
     }
     
-    public static func decode(_ data: Data) throws -> Float {
+    public static func decode(from data: Data) throws -> Float {
         guard let string = String(data: data, encoding: .utf8),
               let value = Float(string) else { throw RunsquitoError.failToParse(nil) }
         return value
@@ -34,12 +34,12 @@ extension Float: Parseable {
 }
 
 extension Double: Parseable {
-    public static func encode(_ value: Double) throws -> Data {
-        guard let data = String(value).data(using: .utf8) else { throw RunsquitoError.failToParse(nil) }
+    public func encode() throws -> Data {
+        guard let data = String(self).data(using: .utf8) else { throw RunsquitoError.failToParse(nil) }
         return data
     }
     
-    public static func decode(_ data: Data) throws -> Double {
+    public static func decode(from data: Data) throws -> Double {
         guard let string = String(data: data, encoding: .utf8),
               let value = Double(string) else { throw RunsquitoError.failToParse(nil) }
         return value
@@ -47,12 +47,12 @@ extension Double: Parseable {
 }
 
 extension Bool: Parseable {
-    public static func encode(_ value: Bool) throws -> Data {
-        guard let data = String(value).data(using: .utf8) else { throw RunsquitoError.failToParse(nil) }
+    public func encode() throws -> Data {
+        guard let data = String(self).data(using: .utf8) else { throw RunsquitoError.failToParse(nil) }
         return data
     }
     
-    public static func decode(_ data: Data) throws -> Bool {
+    public static func decode(from data: Data) throws -> Bool {
         guard let string = String(data: data, encoding: .utf8),
               let value = Bool(string.lowercased()) else { throw RunsquitoError.failToParse(nil) }
         return value
@@ -60,12 +60,12 @@ extension Bool: Parseable {
 }
 
 extension String: Parseable {
-    public static func encode(_ value: String) throws -> Data {
-        guard let data = value.data(using: .utf8) else { throw RunsquitoError.failToParse(nil) }
+    public func encode() throws -> Data {
+        guard let data = data(using: .utf8) else { throw RunsquitoError.failToParse(nil) }
         return data
     }
     
-    public static func decode(_ data: Data) throws -> String {
+    public static func decode(from data: Data) throws -> String {
         guard let value = String(data: data, encoding: .utf8) else { throw RunsquitoError.failToParse(nil) }
         return value
     }

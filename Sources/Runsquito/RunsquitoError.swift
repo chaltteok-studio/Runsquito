@@ -7,14 +7,14 @@
 
 import Foundation
 
-enum RunsquitoError: LocalizedError {
+public enum RunsquitoError: LocalizedError {
     case keyDuplicate(Key)
     case slotNotFound(Key)
     case failToParse(Error?)
     case couldNotEdit
     case typeMismatch
     
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case let .keyDuplicate(key):
             return "Add duplicated key(\"\(key)\")."
@@ -26,7 +26,7 @@ enum RunsquitoError: LocalizedError {
             return "Fail to parse."
             
         case .couldNotEdit:
-            return "Slot couldn't eit."
+            return "Slot couldn't edit."
             
         case .typeMismatch:
             return "fail to add because value's type doesn't match already added value."

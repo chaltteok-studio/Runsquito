@@ -7,14 +7,10 @@
 
 import UIKit
 import Runsquito
-
-struct SectionModel<Section, Item> {
-    let section: Section
-    let items: [Item]
-}
+import JSToast
 
 protocol SlotDetailViewControllerDelegate: AnyObject {
-    func valueChanged()
+    func viewControllerDidChange(_ viewController: SlotDetailViewController)
 }
 
 final class SlotDetailViewController: UIViewController {
@@ -23,21 +19,26 @@ final class SlotDetailViewController: UIViewController {
     enum SectionType {
         case value
         case item
+        case action
         
-        var title: String {
+        var title: String? {
             switch self {
             case .value:
-                return "CURRENT VALUE"
+                return "slot_detail_current_value_title".localized
                 
             case .item:
-                return "STORAGE"
+                return "slot_detail_storage_title".localized
+                
+            case .action:
+                return nil
             }
         }
     }
     
     enum CellType {
         case value
-        case item(Key, AnyItem)
+        case item((Key, AnyItem))
+        case reset
     }
     
     // MARK: - View
@@ -60,14 +61,18 @@ final class SlotDetailViewController: UIViewController {
             SlotDetailSectionModel(
                 section: .item,
                 items: slot.storage
-                    .sorted { $0.key < $1.key }
                     .filter { key, _ in
                         let query = query.trimmingCharacters(in: .whitespaces)
                         guard !query.isEmpty else { return true }
                         
                         return key.contains(query)
                     }
-                    .map { .item($0, $1) }
+                    .sorted(by: \.key)
+                    .map { .item($0) }
+            ),
+            SlotDetailSectionModel(
+                section: .action,
+                items: [.reset]
             )
         ]
             .filter { !$0.items.isEmpty }
@@ -96,6 +101,7 @@ final class SlotDetailViewController: UIViewController {
         super.viewDidLoad()
         
         setUpComponent()
+        setUpAction()
         setUpLayout()
     }
     
@@ -111,16 +117,22 @@ final class SlotDetailViewController: UIViewController {
         tableView.dataSource = self
     }
     
+    private func setUpAction() {
+        
+    }
+    
     private func setUpLayout() {
         
     }
-}
-
-extension SlotDetailViewController: SlotResetTableViewHeaderFooterViewDelegate {
-    func reset() {
-        try? slot.set(nil)
-        
-        tableView.reloadData()
+    
+    private func showToast(title: String) {
+        Toaster.shared.showToast(
+            Toast(ToastView(title: title)),
+            withDuration: 2,
+            at: [.inside(of: .top), .center(of: .x)],
+            show: .slideIn(duration: 0.3, direction: .down),
+            hide: .fadeOut(duration: 0.3)
+        )
     }
 }
 
@@ -138,7 +150,7 @@ extension SlotDetailViewController: UITableViewDataSource {
         
         switch item {
         case .value:
-            let identifier = String(describing: SlotValueTableViewCell.self)
+            let identifier = SlotValueTableViewCell.name
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotValueTableViewCell else {
                 fatalError("Fail to dequeue cell for identifier: \(identifier)")
@@ -148,14 +160,23 @@ extension SlotDetailViewController: UITableViewDataSource {
             
             return cell
             
-        case let .item(key, item):
-            let identifier = String(describing: SlotDetailTableViewCell.self)
+        case let .item(value):
+            let identifier = SlotDetailTableViewCell.name
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotDetailTableViewCell else {
                 fatalError("Fail to dequeue cell for identifier: \(identifier)")
             }
             
-            cell.configure(id: key, item: item)
+            cell.configure(value: value)
+            
+            return cell
+            
+        case .reset:
+            let identifier = SlotResetTableViewCell.name
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotResetTableViewCell else {
+                fatalError("Fail to dequeue cell for identifier: \(identifier)")
+            }
             
             return cell
         }
@@ -165,20 +186,6 @@ extension SlotDetailViewController: UITableViewDataSource {
 extension SlotDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         items[section].section.title
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard section == tableView.numberOfSections - 1 else { return nil }
-        
-        let identifier = String(describing: SlotResetTableViewHeaderFooterView.self)
-        
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as? SlotResetTableViewHeaderFooterView else {
-            fatalError("Fail to dequeue header for identifier: \(identifier)")
-        }
-        
-        view.delegate = self
-        
-        return view
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -195,11 +202,19 @@ extension SlotDetailViewController: UITableViewDelegate {
             
             navigationController?.pushViewController(viewController, animated: true)
             
-        case let .item(_, item):
-            try? slot.set(item.value)
+        case let .item(value):
+            let (_, item) = value
+            try? slot.setValue(item.value)
             tableView.reloadData()
             
-            delegate?.valueChanged()
+            delegate?.viewControllerDidChange(self)
+            
+        case .reset:
+            try? slot.setValue(nil)
+            
+            tableView.reloadData()
+            
+            showToast(title: "slot_detail_reset_taost_title".localized)
         }
     }
     
@@ -220,10 +235,17 @@ extension SlotDetailViewController: UISearchBarDelegate {
 }
 
 extension SlotDetailViewController: ValueEditViewControllerDelegate {
-    func edited() {
+    func viewController(_ viewController: ValueEditViewController, valueDidChange value: Any) {
         tableView.reloadData()
         
-        delegate?.valueChanged()
+        delegate?.viewControllerDidChange(self)
+        
         navigationController?.popViewController(animated: true)
+    }
+    
+    func viewController(_ viewController: ValueEditViewController, itemDidUpdate item: AnyItem) {
+        tableView.reloadData()
+        
+        delegate?.viewControllerDidChange(self)
     }
 }

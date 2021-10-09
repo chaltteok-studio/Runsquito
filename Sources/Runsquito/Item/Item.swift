@@ -15,3 +15,9 @@ public protocol Item {
     /// Description of item.
     var description: String? { get }
 }
+
+extension Item {
+    func eraseToAnyItem() -> AnyItem {
+        AnyItem(self)
+    }
+}

@@ -7,7 +7,7 @@
 
 import Foundation
 
-open class CodableSlot<Value>: ValueSlot<Value>, Editable where Value: Codable {
+open class CodableSlot<Value>: ValueSlot<Value>, EditableSlot where Value: Codable {
     // MARK: - Property
     
     // MARK: - Initializer
@@ -22,9 +22,10 @@ open class CodableSlot<Value>: ValueSlot<Value>, Editable where Value: Codable {
         return try encoder.encode(value)
     }
     
-    open func decode(_ data: Data) throws {
+    open func decode(from data: Data) throws -> Value {
         let decoder = JSONDecoder()
-        set(try decoder.decode(Value.self, from: data))
+        
+        return try decoder.decode(Value.self, from: data)
     }
     
     // MARK: - Private

@@ -48,7 +48,7 @@ public final class RunsquitoViewController: UINavigationController {
 }
 
 extension RunsquitoViewController: SlotListViewControllerDelegate {
-    func close() {
+    func viewControllerCloseButtonClicked(_ viewController: SlotListViewController) {
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
 }

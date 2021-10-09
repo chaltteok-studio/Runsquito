@@ -27,7 +27,7 @@ final class CodableSlotTests: XCTestCase {
     }
     
     // MARK: - Test
-    func test_that_item_is_added_into_storage_when_item_add() {
+    func test_that_item_is_added_into_storage_when_item_updateItem() {
         // MARK: Given
         let key = "test-item"
         let value = Car(
@@ -37,7 +37,7 @@ final class CodableSlotTests: XCTestCase {
         let item = ValueItem(value)
         
         // MARK: When
-        slot.add(item, for: key)
+        slot.updateItem(item, forKey: key)
         
         // MARK: Then
         XCTAssertNotNil(slot.storage[key])
@@ -52,10 +52,10 @@ final class CodableSlotTests: XCTestCase {
         )
         let item = ValueItem(value)
         
-        slot.add(item, for: key)
+        slot.updateItem(item, forKey: key)
         
         // MARK: When
-        slot.remove(for: key)
+        slot.removeItem(forKey: key)
         
         // MARK: Then
         XCTAssertNil(slot.storage[key])
@@ -69,7 +69,7 @@ final class CodableSlotTests: XCTestCase {
         )
         
         // MARK: When
-        slot.set(value)
+        slot.setValue(value)
         
         // MARK: Then
         XCTAssertEqual(slot.value, value)
@@ -81,10 +81,10 @@ final class CodableSlotTests: XCTestCase {
             name: "model 3",
             manufacturer: "tesla"
         )
-        slot.set(value)
+        slot.setValue(value)
         
         // MARK: When
-        slot.set(nil)
+        slot.setValue(nil)
         
         // MARK: Then
         XCTAssertNil(slot.value)
@@ -97,7 +97,7 @@ final class CodableSlotTests: XCTestCase {
             manufacturer: "tesla"
         )
         
-        slot.set(value)
+        slot.setValue(value)
         
         // MARK: When
         let encodedData = try? slot.encode()
@@ -125,7 +125,7 @@ final class CodableSlotTests: XCTestCase {
         let data = try encode(value)
         
         // MARK: When
-        try slot.decode(data)
+        try slot.decode(from: data)
         
         // MARK: Then
         XCTAssertEqual(slot.value, value)
@@ -134,12 +134,12 @@ final class CodableSlotTests: XCTestCase {
     func test_that_slot_is_not_set_decoded_data_when_decode_fail() throws {
         // MARK: Given
         let value = 10
-        let data = try Int.encode(value)
+        let data = try value.encode()
         
         // MARK: When
         
         // MARK: Then
-        XCTAssertThrowsError(try slot.decode(data))
+        XCTAssertThrowsError(try slot.decode(from: data))
     }
     
     // MARK: - Private

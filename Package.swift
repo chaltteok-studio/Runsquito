@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Runsquito",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v11)
     ],
@@ -19,7 +20,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        
+        .package(url: "https://github.com/wlsdms0122/JSToast", .exact("1.0.0"))
     ],
     targets: [
         .target(
@@ -28,7 +29,10 @@ let package = Package(
         ),
         .target(
             name: "RunsquitoKit",
-            dependencies: ["Runsquito"]
+            dependencies: [
+                "Runsquito",
+                "JSToast"
+            ]
         ),
         .testTarget(
             name: "RunsquitoTests",

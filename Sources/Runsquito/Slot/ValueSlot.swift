@@ -9,31 +9,29 @@ import Foundation
 
 open class ValueSlot<Value>: Slot {
     // MARK: - Prorperty
-    open private(set) var value: Value?
-    open private(set) var storage: [Key: AnyItem]
+    public private(set) var value: Value?
+    public private(set) var storage: [Key: AnyItem] = [:]
     public let description: String?
     
     // MARK: - Initializer
     public init(
         value: Value? = nil,
-        description: String? = nil,
-        storage: [Key: AnyItem] = [:]
+        description: String? = nil
     ) {
         self.value = value
         self.description = description
-        self.storage = storage
     }
     
     // MARK: - Public
-    open func add<I: Item>(_ item: I, for key: Key) where I.Value == Value {
-        storage[key] = AnyItem(item)
+    open func updateItem<I>(_ item: I, forKey key: Key) where I: Item, I.Value == Value {
+        storage.updateValue(item.eraseToAnyItem(), forKey: key)
     }
     
-    open func remove(for key: Key) {
-        storage[key] = nil
+    open func removeItem(forKey key: Key) {
+        storage.removeValue(forKey: key)
     }
     
-    open func set(_ value: Value?) {
+    open func setValue(_ value: Value?) {
         self.value = value
     }
     

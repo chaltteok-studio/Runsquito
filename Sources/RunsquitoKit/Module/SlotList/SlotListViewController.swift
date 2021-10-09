@@ -9,7 +9,7 @@ import UIKit
 import Runsquito
 
 protocol SlotListViewControllerDelegate: AnyObject {
-    func close()
+    func viewControllerCloseButtonClicked(_ viewController: SlotListViewController)
 }
 
 final class SlotListViewController: UIViewController {
@@ -28,13 +28,13 @@ final class SlotListViewController: UIViewController {
     private var query: String = ""
     private var items: [(Key, AnySlot)] {
         Runsquito.default.slots
-            .sorted { $0.key < $1.key }
             .filter { key, _ in
                 let query = query.trimmingCharacters(in: .whitespaces)
                 guard !query.isEmpty else { return true }
                 
                 return key.contains(query)
             }
+            .sorted(by: \.key)
             .map { ($0, $1) }
     }
     
@@ -63,14 +63,14 @@ final class SlotListViewController: UIViewController {
     
     // MARK: - Action
     @objc private func closeTap(_ sender: UIButton) {
-        delegate?.close()
+        delegate?.viewControllerCloseButtonClicked(self)
     }
     
     // MARK: - Public
     
     // MARK: - Private
     private func setUpComponent() {
-        title = "Runsquito"
+        title = "title".localized
         
         searchBar.delegate = self
         
@@ -93,7 +93,7 @@ extension SlotListViewController: UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = String(describing: SlotListTableViewCell.self)
+        let identifier = SlotListTableViewCell.name
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotListTableViewCell else {
             fatalError("Fail to dequeue cell for identifier: \(identifier)")
@@ -101,7 +101,7 @@ extension SlotListViewController: UITableViewDataSource {
         
         let (key, slot) = items[indexPath.item]
         
-        cell.configure(id: key, slot: slot)
+        cell.configure(key: key, slot: slot)
         
         return cell
     }
@@ -127,7 +127,7 @@ extension SlotListViewController: UITableViewDelegate {
 }
 
 extension SlotListViewController: SlotDetailViewControllerDelegate {
-    func valueChanged() {
+    func viewControllerDidChange(_ viewController: SlotDetailViewController) {
         tableView.reloadData()
     }
 }

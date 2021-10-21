@@ -212,6 +212,8 @@ extension SlotDetailViewController: UITableViewDelegate {
         case .reset:
             try? slot.setValue(nil)
             
+            delegate?.viewControllerDidChange(self)
+            
             tableView.reloadData()
             
             showToast(title: "slot_detail_reset_taost_title".localized)

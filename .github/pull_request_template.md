@@ -8,7 +8,7 @@
 
 # 📄 Changes
 > Write what is changed.
-> You can write more detail informations using MD symtax.
+> You can write more detail informations using MD syntax.
 
 
 # 🚧 Testing

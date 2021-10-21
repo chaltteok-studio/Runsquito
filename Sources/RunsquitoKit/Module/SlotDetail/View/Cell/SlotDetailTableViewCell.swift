@@ -22,6 +22,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     
     private let keyLabel: UILabel = {
         let view = UILabel()
+        view.lineBreakMode = .byTruncatingHead
         view.textAlignment = .right
         view.textColor = .gray
         view.font = .systemFont(ofSize: 16)
@@ -49,6 +50,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     
     private let valueLabel: UILabel = {
         let view = UILabel()
+        view.lineBreakMode = .byTruncatingHead
         view.textAlignment = .right
         view.textColor = .gray
         view.font = .systemFont(ofSize: 16)

@@ -20,7 +20,7 @@ final class SlotValueTableViewCell: UITableViewCell {
     
     private let arrowButton: UIButton = {
         let view = UIButton()
-        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        view.setContentHuggingPriority(.required, for: .horizontal)
         view.setImage(R.Icon.arrowRight, for: .normal)
         
         return view

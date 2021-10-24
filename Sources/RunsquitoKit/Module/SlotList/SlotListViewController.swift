@@ -157,6 +157,8 @@ extension SlotListViewController: UITableViewDelegate {
                 .forEach { try? $0.setValue(nil) }
             
             tableView.reloadData()
+            
+            ToastController.shared.showToast(title: "slot_list_reset_all_toast_title".localized)
         }
     }
     

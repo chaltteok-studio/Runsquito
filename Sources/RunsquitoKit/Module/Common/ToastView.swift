@@ -11,7 +11,6 @@ class ToastView: UIView {
     // MARK: - View
     private let titleLabel: UILabel = {
         let view = UILabel()
-        view.textColor = .white
         view.font = .systemFont(ofSize: 17, weight: .semibold)
         
         return view
@@ -45,9 +44,11 @@ class ToastView: UIView {
         if #available(iOS 12.0, *) {
             switch traitCollection.userInterfaceStyle {
             case .dark:
+                layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
                 titleLabel.textColor = .black
                 
             default:
+                layer.shadowColor = UIColor.white.withAlphaComponent(0.3).cgColor
                 titleLabel.textColor = .white
             }
         }
@@ -66,8 +67,23 @@ class ToastView: UIView {
         backgroundColor = R.Color.gray
         layer.cornerRadius = 26
         
-        layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
         layer.shadowOffset = .init(width: 0, height: 2)
+        layer.shadowOpacity = 1
+        
+        if #available(iOS 12.0, *) {
+            switch traitCollection.userInterfaceStyle {
+            case .dark:
+                layer.shadowColor = UIColor.white.withAlphaComponent(0.3).cgColor
+                titleLabel.textColor = .black
+                
+            default:
+                layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
+                titleLabel.textColor = .white
+            }
+        } else {
+            titleLabel.textColor = .white
+            layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
+        }
         
         self.title = title
     }

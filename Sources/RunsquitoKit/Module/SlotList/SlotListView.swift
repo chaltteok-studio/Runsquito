@@ -31,6 +31,7 @@ final class SlotListView: UIView {
         
         // Cell register
         view.register(SlotListTableViewCell.self, forCellReuseIdentifier: SlotListTableViewCell.name)
+        view.register(SlotAllResetTableViewCell.self, forCellReuseIdentifier: SlotAllResetTableViewCell.name)
         
         return view
     }()

@@ -142,6 +142,8 @@ final class SlotListTableViewCell: UITableViewCell {
     ) {
         keyLabel.text = key
         valueLabel.text = "\(slot.value ?? "nil") (\(String(describing: slot.type)))"
+        valueLabel.textColor = slot.value != nil ? valueLabel.tintColor : .gray
+        
         storageLabel.text = "\(slot.storage.count)"
         descriptionLabel.text = slot.description
         

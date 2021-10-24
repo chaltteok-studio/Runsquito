@@ -216,7 +216,7 @@ extension SlotDetailViewController: UITableViewDelegate {
             
             tableView.reloadData()
             
-            showToast(title: "slot_detail_reset_taost_title".localized)
+            ToastController.shared.showToast(title: "slot_detail_reset_taost_title".localized)
         }
     }
     

@@ -12,7 +12,8 @@ final class SlotListTableViewCell: UITableViewCell {
     // MARK: - View
     private let keyTitleLabel: UILabel = {
         let view = UILabel()
-        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        view.setContentHuggingPriority(.required, for: .horizontal)
+        view.setContentCompressionResistancePriority(.required, for: .horizontal)
         view.font = .systemFont(ofSize: 16)
         view.text = "slot_list_key_title".localized
         
@@ -21,6 +22,7 @@ final class SlotListTableViewCell: UITableViewCell {
     
     private let keyLabel: UILabel = {
         let view = UILabel()
+        view.lineBreakMode = .byTruncatingHead
         view.textAlignment = .right
         view.textColor = .gray
         view.font = .systemFont(ofSize: 16)
@@ -38,7 +40,8 @@ final class SlotListTableViewCell: UITableViewCell {
     
     private let valueTitleLabel: UILabel = {
         let view = UILabel()
-        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        view.setContentHuggingPriority(.required, for: .horizontal)
+        view.setContentCompressionResistancePriority(.required, for: .horizontal)
         view.font = .systemFont(ofSize: 16)
         view.text = "slot_list_value_title".localized
         
@@ -47,6 +50,7 @@ final class SlotListTableViewCell: UITableViewCell {
     
     private let valueLabel: UILabel = {
         let view = UILabel()
+        view.lineBreakMode = .byTruncatingHead
         view.textAlignment = .right
         view.textColor = .gray
         view.font = .systemFont(ofSize: 16)
@@ -64,7 +68,8 @@ final class SlotListTableViewCell: UITableViewCell {
     
     private let storageTitleLabel: UILabel = {
         let view = UILabel()
-        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        view.setContentHuggingPriority(.required, for: .horizontal)
+        view.setContentCompressionResistancePriority(.required, for: .horizontal)
         view.font = .systemFont(ofSize: 16)
         view.text = "slot_list_storage_title".localized
         
@@ -137,6 +142,8 @@ final class SlotListTableViewCell: UITableViewCell {
     ) {
         keyLabel.text = key
         valueLabel.text = "\(slot.value ?? "nil") (\(String(describing: slot.type)))"
+        valueLabel.textColor = slot.value != nil ? valueLabel.tintColor : .gray
+        
         storageLabel.text = "\(slot.storage.count)"
         descriptionLabel.text = slot.description
         

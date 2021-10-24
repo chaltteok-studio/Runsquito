@@ -14,7 +14,7 @@ protocol ValueUpdateKeyTableViewCellDelegate: AnyObject {
 
 final class ValueUpdateKeyTableViewCell: UITableViewCell {
     // MARK: - View
-    private let keyboardAccessoryView: UIToolbar = {
+    private lazy var keyboardAccessoryView: UIToolbar = {
         let view = UIToolbar()
         view.sizeToFit()
         
@@ -24,7 +24,7 @@ final class ValueUpdateKeyTableViewCell: UITableViewCell {
             title: "done_title".localized,
             style: .done,
             target: self,
-            action: #selector(doneButtonTap(_:))
+            action: #selector(self.doneButtonTap(_:))
         )
         
         view.items = [spacer, doneButton]

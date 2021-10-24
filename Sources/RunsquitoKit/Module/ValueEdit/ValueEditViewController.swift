@@ -264,11 +264,11 @@ extension ValueEditViewController: UITableViewDelegate {
         
         tableView.reloadData()
         
-        showToast(
-            title: exists
-            ? "value_edit_update_item_toast_title".localized
-            : "value_edit_add_item_toast_title".localized
-        )
+        let title = exists
+        ? "value_edit_update_item_toast_title".localized
+        : "value_edit_add_item_toast_title".localized
+        
+        ToastController.shared.showToast(title: title)
         
         delegate?.viewController(self, itemDidUpdate: item)
     }

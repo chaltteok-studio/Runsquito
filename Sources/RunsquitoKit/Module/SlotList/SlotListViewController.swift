@@ -13,6 +13,18 @@ protocol SlotListViewControllerDelegate: AnyObject {
 }
 
 final class SlotListViewController: UIViewController {
+    typealias SlotListSectionModel = SectionModel<SectionType, CellType>
+    
+    enum SectionType {
+        case slot
+        case action
+    }
+    
+    enum CellType {
+        case slot((Key, AnySlot))
+        case reset
+    }
+    
     // MARK: - View
     private let root = SlotListView()
     
@@ -26,16 +38,22 @@ final class SlotListViewController: UIViewController {
     weak var delegate: SlotListViewControllerDelegate?
     
     private var query: String = ""
-    private var items: [(Key, AnySlot)] {
-        Runsquito.default.slots
-            .filter { key, _ in
-                let query = query.trimmingCharacters(in: .whitespaces)
-                guard !query.isEmpty else { return true }
-                
-                return key.contains(query)
-            }
-            .sorted(by: \.key)
-            .map { ($0, $1) }
+    private var dataSource: [SlotListSectionModel] {
+        [
+            SlotListSectionModel(
+                section: .slot,
+                items: runsquito.slots
+                    .filter { key, _ in
+                        let query = query.trimmingCharacters(in: .whitespaces)
+                        guard !query.isEmpty else { return true }
+                        
+                        return key.contains(query)
+                    }
+                    .sorted(by: \.key)
+                    .map { .slot(($0, $1)) }
+            ),
+            SlotListSectionModel(section: .action, items: [.reset])
+        ]
     }
     
     // MARK: - Initializer
@@ -88,22 +106,34 @@ final class SlotListViewController: UIViewController {
 }
 
 extension SlotListViewController: UITableViewDataSource {
+    public func numberOfSections(in tableView: UITableView) -> Int {
+        dataSource.count
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        items.count
+        dataSource[section].items.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = SlotListTableViewCell.name
+        let item = dataSource[indexPath.section].items[indexPath.item]
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotListTableViewCell else {
-            fatalError("Fail to dequeue cell for identifier: \(identifier)")
+        switch item {
+        case let .slot((key, slot)):
+            let identifier = SlotListTableViewCell.name
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? SlotListTableViewCell else {
+                fatalError("Fail to dequeue cell for identifier: \(identifier)")
+            }
+            
+            cell.configure(key: key, slot: slot)
+            
+            return cell
+            
+        case .reset:
+            let identifier = SlotAllResetTableViewCell.name
+            
+            return tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         }
-        
-        let (key, slot) = items[indexPath.item]
-        
-        cell.configure(key: key, slot: slot)
-        
-        return cell
     }
 }
 
@@ -113,12 +143,23 @@ extension SlotListViewController: UITableViewDelegate {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let (key, slot) = items[indexPath.item]
+        let item = dataSource[indexPath.section].items[indexPath.item]
         
-        let viewController = SlotDetailViewController(key: key, slot: slot)
-        viewController.delegate = self
-        
-        navigationController?.pushViewController(viewController, animated: true)
+        switch item {
+        case let .slot((key, slot)):
+            let viewController = SlotDetailViewController(key: key, slot: slot)
+            viewController.delegate = self
+            
+            navigationController?.pushViewController(viewController, animated: true)
+            
+        case .reset:
+            runsquito.slots.values
+                .forEach { try? $0.setValue(nil) }
+            
+            tableView.reloadData()
+            
+            ToastController.shared.showToast(title: "slot_list_reset_all_toast_title".localized)
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

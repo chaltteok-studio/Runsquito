@@ -33,6 +33,7 @@ final class SlotListTableViewCell: UITableViewCell {
     private let keyStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
+        view.alignment = .center
         view.spacing = 16
         
         return view
@@ -61,33 +62,7 @@ final class SlotListTableViewCell: UITableViewCell {
     private let valueStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
-        view.spacing = 16
-        
-        return view
-    }()
-    
-    private let storageTitleLabel: UILabel = {
-        let view = UILabel()
-        view.setContentHuggingPriority(.required, for: .horizontal)
-        view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.font = .systemFont(ofSize: 16)
-        view.text = "slot_list_storage_title".localized
-        
-        return view
-    }()
-    
-    private let storageLabel: UILabel = {
-        let view = UILabel()
-        view.textAlignment = .right
-        view.textColor = .gray
-        view.font = .systemFont(ofSize: 16)
-        
-        return view
-    }()
-    
-    private let storageStackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .horizontal
+        view.alignment = .center
         view.spacing = 16
         
         return view
@@ -105,6 +80,7 @@ final class SlotListTableViewCell: UITableViewCell {
     private let contentStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
+        view.distribution = .equalSpacing
         view.spacing = 6
         
         return view
@@ -129,7 +105,6 @@ final class SlotListTableViewCell: UITableViewCell {
         
         keyLabel.text = nil
         valueLabel.text = nil
-        storageLabel.text = nil
         descriptionLabel.text = nil
         
         descriptionLabel.isHidden = true
@@ -141,10 +116,9 @@ final class SlotListTableViewCell: UITableViewCell {
         slot: AnySlot
     ) {
         keyLabel.text = key
+        keyLabel.textColor = slot.value != nil ? valueLabel.tintColor : .gray
         valueLabel.text = "\(slot.value ?? "nil") (\(String(describing: slot.type)))"
-        valueLabel.textColor = slot.value != nil ? valueLabel.tintColor : .gray
         
-        storageLabel.text = "\(slot.storage.count)"
         descriptionLabel.text = slot.description
         
         descriptionLabel.isHidden = slot.description == nil
@@ -156,20 +130,26 @@ final class SlotListTableViewCell: UITableViewCell {
     }
     
     private func setUpLayout() {
-        [keyTitleLabel, keyLabel].forEach { keyStackView.addArrangedSubview($0) }
+        [
+            keyTitleLabel,
+            keyLabel
+        ]
+            .forEach { keyStackView.addArrangedSubview($0) }
         
-        [valueTitleLabel, valueLabel].forEach { valueStackView.addArrangedSubview($0) }
-        
-        [storageTitleLabel, storageLabel].forEach { storageStackView.addArrangedSubview($0) }
+        [
+            valueTitleLabel,
+            valueLabel
+        ]
+            .forEach { valueStackView.addArrangedSubview($0) }
         
         [
             keyStackView,
             valueStackView,
-            storageStackView,
             descriptionLabel
-        ].forEach {
-            contentStackView.addArrangedSubview($0)
-        }
+        ]
+            .forEach {
+                contentStackView.addArrangedSubview($0)
+            }
         
         [contentStackView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false

@@ -28,9 +28,15 @@ final class SlotListViewController: UIViewController {
     // MARK: - View
     private let root = SlotListView()
     
+    private var headerView: UIView { root.headerView }
     private var searchBar: UISearchBar { root.searchBar }
+    private var filterSwitch: UISwitch { root.filterSwitch }
+    
     private var tableView: UITableView { root.tableView }
+    
     private var closeButton: UIButton { root.closeButton }
+    
+    private var headerTopConstraint: NSLayoutConstraint? { root.headerTopConstraint }
     
     // MARK: - Property
     private let runsquito: Runsquito
@@ -38,11 +44,16 @@ final class SlotListViewController: UIViewController {
     weak var delegate: SlotListViewControllerDelegate?
     
     private var query: String = ""
+    private var isFiltered: Bool = false
     private var dataSource: [SlotListSectionModel] {
         [
             SlotListSectionModel(
                 section: .slot,
                 items: runsquito.slots
+                    .filter { _, value in
+                        guard isFiltered else { return true }
+                        return value.value != nil
+                    }
                     .filter { key, _ in
                         let query = query.trimmingCharacters(in: .whitespaces)
                         guard !query.isEmpty else { return true }
@@ -80,6 +91,11 @@ final class SlotListViewController: UIViewController {
     }
     
     // MARK: - Action
+    @objc private func filterChange(_ sender: UISwitch) {
+        isFiltered = sender.isOn
+        tableView.reloadData()
+    }
+    
     @objc private func closeTap(_ sender: UIButton) {
         delegate?.viewControllerCloseButtonClicked(self)
     }
@@ -101,6 +117,7 @@ final class SlotListViewController: UIViewController {
     }
     
     private func setUpAction() {
+        filterSwitch.addTarget(self, action: #selector(filterChange(_:)), for: .valueChanged)
         closeButton.addTarget(self, action: #selector(closeTap(_:)), for: .touchUpInside)
     }
 }
@@ -164,6 +181,10 @@ extension SlotListViewController: UITableViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         view.endEditing(true)
+        
+        headerTopConstraint?.constant = max(-44, -(scrollView.contentInset.top + scrollView.contentOffset.y))
+        
+        view.layoutIfNeeded()
     }
 }
 

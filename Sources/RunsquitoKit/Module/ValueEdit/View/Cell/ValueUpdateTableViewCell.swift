@@ -68,8 +68,9 @@ final class ValueUpdateTableViewCell: UITableViewCell {
         }
         
         NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24)
         ])
     }

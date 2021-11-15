@@ -11,9 +11,9 @@
 // MARK: - Slot List
 "slot_list_key_title" = "Key";
 "slot_list_value_title" = "Value";
-"slot_list_storage_title" = "Storage";
 "slot_list_reset_all_title" = "Reset All Slots";
 "slot_list_reset_all_toast_title" = "All slots reset.";
+"slot_list_filter_title" = "Show only set slots";
 
 // MARK: - Slot Detail
 "slot_detail_current_value_title" = "Current Value";

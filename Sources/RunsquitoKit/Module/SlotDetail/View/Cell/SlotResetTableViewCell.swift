@@ -62,8 +62,9 @@ final class SlotResetTableViewCell: UITableViewCell {
         }
         
         NSLayoutConstraint.activate([
-            resetLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            resetLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             resetLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            resetLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
             resetLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24)
         ])
     }

@@ -33,6 +33,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     private let keyStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
+        view.alignment = .center
         view.spacing = 16
         
         return view
@@ -61,6 +62,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     private let valueStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
+        view.alignment = .center
         view.spacing = 16
         
         return view
@@ -78,6 +80,7 @@ final class SlotDetailTableViewCell: UITableViewCell {
     private let contentStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
+        view.distribution = .equalSpacing
         view.spacing = 6
         
         return view

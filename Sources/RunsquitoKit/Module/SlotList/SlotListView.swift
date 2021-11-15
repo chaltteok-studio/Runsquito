@@ -8,6 +8,9 @@
 import UIKit
 
 final class SlotListView: UIView {
+    // MARK: - Constsnt
+    static let headerHeight: CGFloat = 91
+    
     // MARK: - View
     let searchBar: UISearchBar = {
         let view = UISearchBar()
@@ -21,13 +24,52 @@ final class SlotListView: UIView {
         return view
     }()
     
-    private let headerContainerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 60))
+    private let filterLabel: UILabel = {
+        let view = UILabel()
+        view.textColor = .gray
+        view.font = .systemFont(ofSize: 16)
+        view.text = "slot_list_filter_title".localized
+        
+        return view
+    }()
+    
+    let filterSwitch: UISwitch = {
+        let view = UISwitch()
+        return view
+    }()
+    
+    private let filterStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .horizontal
+        view.alignment = .center
+        view.spacing = 8
+        
+        return view
+    }()
+    
+    let headerView: UIView = {
+        let view = UIView(
+            frame: .init(
+                x: 0,
+                y: 0,
+                width: 0,
+                height: SlotListView.headerHeight
+            )
+        )
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemGroupedBackground
+        } else {
+            view.backgroundColor = .groupTableViewBackground
+        }
+        
         return view
     }()
     
     let tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .grouped)
+        view.tableHeaderView = UIView(frame: .init(x: 0, y: 0, width: 0, height: CGFloat.leastNormalMagnitude))
+        view.contentInset.top = SlotListView.headerHeight
+        view.scrollIndicatorInsets.top = SlotListView.headerHeight
         
         // Cell register
         view.register(SlotListTableViewCell.self, forCellReuseIdentifier: SlotListTableViewCell.name)
@@ -46,6 +88,8 @@ final class SlotListView: UIView {
         
         return view
     }()
+    
+    var headerTopConstraint: NSLayoutConstraint?
     
     // MARK: - Property
     
@@ -79,8 +123,6 @@ final class SlotListView: UIView {
         } else {
             backgroundColor = .groupTableViewBackground
         }
-        
-        tableView.tableHeaderView = headerContainerView
     }
     
     private func setUpAction() {
@@ -88,33 +130,64 @@ final class SlotListView: UIView {
     }
     
     private func setUpLayout() {
-        [searchBar].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            headerContainerView.addSubview($0)
-        }
+        [
+            filterLabel,
+            filterSwitch
+        ]
+            .forEach { filterStackView.addArrangedSubview($0) }
         
-        let searchBarTrailingConstraint = searchBar.trailingAnchor.constraint(equalTo: headerContainerView.trailingAnchor, constant: -16)
-        searchBarTrailingConstraint.priority = .defaultHigh
+        [
+            searchBar,
+            filterStackView
+        ]
+            .forEach {
+                $0.translatesAutoresizingMaskIntoConstraints = false
+                headerView.addSubview($0)
+            }
+        
+        let searchBarTrailingConstraint = searchBar.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16)
+        searchBarTrailingConstraint.priority = .init(999)
         
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: headerContainerView.topAnchor, constant: 8),
+            searchBar.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 8),
             searchBarTrailingConstraint,
-            searchBar.leadingAnchor.constraint(equalTo: headerContainerView.leadingAnchor, constant: 16),
+            searchBar.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
             searchBar.heightAnchor.constraint(equalToConstant: 36)
+        ])
+        
+        let filterStackViewTrailingConstraint = filterStackView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -24)
+        filterStackViewTrailingConstraint.priority = .init(999)
+        
+        NSLayoutConstraint.activate([
+            filterStackView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
+            filterStackViewTrailingConstraint,
+            filterStackView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -8),
+            filterStackView.leadingAnchor.constraint(greaterThanOrEqualTo: headerView.leadingAnchor, constant: 8)
         ])
         
         [
             tableView,
+            headerView,
             closeButton
-        ].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
-        }
+        ]
+            .forEach {
+                $0.translatesAutoresizingMaskIntoConstraints = false
+                addSubview($0)
+            }
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: topAnchor),
-            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableView.leadingAnchor.constraint(equalTo: leadingAnchor)
+            tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            tableView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor)
+        ])
+        
+        let headerTopConstraint = headerView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor)
+        self.headerTopConstraint = headerTopConstraint
+        
+        NSLayoutConstraint.activate([
+            headerTopConstraint,
+            headerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            headerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor)
         ])
         
         NSLayoutConstraint.activate([

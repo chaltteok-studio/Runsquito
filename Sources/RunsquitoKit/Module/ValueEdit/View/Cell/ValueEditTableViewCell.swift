@@ -15,7 +15,7 @@ protocol ValueEditTableViewCellDelegate: AnyObject {
 final class ValueEditTableViewCell: UITableViewCell {
     // MARK: - View
     private lazy var keyboardAccessoryView: UIToolbar = {
-        let view = UIToolbar()
+        let view = UIToolbar(frame: .init(x: 0, y: 0, width: 100, height: 100))
         view.sizeToFit()
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)

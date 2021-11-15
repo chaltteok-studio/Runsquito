@@ -15,7 +15,7 @@ protocol ValueUpdateKeyTableViewCellDelegate: AnyObject {
 final class ValueUpdateKeyTableViewCell: UITableViewCell {
     // MARK: - View
     private lazy var keyboardAccessoryView: UIToolbar = {
-        let view = UIToolbar()
+        let view = UIToolbar(frame: .init(x: 0, y: 0, width: 100, height: 100))
         view.sizeToFit()
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -136,8 +136,9 @@ final class ValueUpdateKeyTableViewCell: UITableViewCell {
         }
         
         NSLayoutConstraint.activate([
-            contentStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24)
         ])
     }

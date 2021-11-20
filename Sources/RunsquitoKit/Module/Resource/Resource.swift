@@ -12,6 +12,7 @@ typealias R = Resource
 enum Resource {
     enum Color {
         static var gray: UIColor { UIColor(named: "gray", in: .module, compatibleWith: nil)! }
+        static var separator: UIColor { UIColor(named: "separator", in: .module, compatibleWith: nil)! }
     }
     
     enum Icon {

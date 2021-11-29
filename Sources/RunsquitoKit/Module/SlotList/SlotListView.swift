@@ -47,6 +47,13 @@ final class SlotListView: UIView {
         return view
     }()
     
+    private let headerBottomDividerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = R.Color.separator
+        
+        return view
+    }()
+    
     let headerView: UIView = {
         let view = UIView(
             frame: .init(
@@ -70,6 +77,10 @@ final class SlotListView: UIView {
         view.tableHeaderView = UIView(frame: .init(x: 0, y: 0, width: 0, height: CGFloat.leastNormalMagnitude))
         view.contentInset.top = SlotListView.headerHeight
         view.scrollIndicatorInsets.top = SlotListView.headerHeight
+        
+        // Set content offset to (-)top content inset.
+        // because code generate table view's inset not work about initial offset of table view.
+        view.contentOffset.y = -SlotListView.headerHeight
         
         // Cell register
         view.register(SlotListTableViewCell.self, forCellReuseIdentifier: SlotListTableViewCell.name)
@@ -138,7 +149,8 @@ final class SlotListView: UIView {
         
         [
             searchBar,
-            filterStackView
+            filterStackView,
+            headerBottomDividerView
         ]
             .forEach {
                 $0.translatesAutoresizingMaskIntoConstraints = false
@@ -163,6 +175,13 @@ final class SlotListView: UIView {
             filterStackViewTrailingConstraint,
             filterStackView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -8),
             filterStackView.leadingAnchor.constraint(greaterThanOrEqualTo: headerView.leadingAnchor, constant: 8)
+        ])
+        
+        NSLayoutConstraint.activate([
+            headerBottomDividerView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
+            headerBottomDividerView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
+            headerBottomDividerView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            headerBottomDividerView.heightAnchor.constraint(equalToConstant: 1 / UIScreen.main.scale)
         ])
         
         [

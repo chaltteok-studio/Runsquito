@@ -61,16 +61,12 @@ open class Runsquito {
         try slots[key]?.encode()
     }
     
-    open func decode(_ data: Data, forKey key: Key) throws {
-        try slots[key]?.decode(from: data)
+    open func decode<T>(_ type: T.Type = T.self, _ data: Data, forKey key: Key) throws -> T? {
+        try slots[key]?.decode(from: data) as? T
     }
     
-    open func value<T>(forKey key: Key) -> T? {
+    open func value<T>(_ type: T.Type = T.self, forKey key: Key) -> T? {
         slots[key]?.value as? T
-    }
-    
-    open func value<T>(_ type: T.Type, forKey key: Key) -> T? {
-        value(forKey: key)
     }
     
     // MARK: - Private

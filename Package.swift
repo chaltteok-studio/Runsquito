@@ -20,7 +20,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/wlsdms0122/JSToast", .exact("1.0.0"))
+        .package(url: "https://github.com/wlsdms0122/JSToast", .exact("2.0.0"))
     ],
     targets: [
         .target(

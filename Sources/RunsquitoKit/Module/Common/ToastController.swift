@@ -16,9 +16,9 @@ class ToastController {
         Toaster.shared.showToast(
             Toast(ToastView(title: title)),
             withDuration: 2,
-            at: [.inside(of: .top), .center(of: .x)],
-            show: .slideIn(duration: 0.3, direction: .down),
-            hide: .fadeOut(duration: 0.3)
+            positions: [.inside(of: .top), .center(of: .x)],
+            showAnimator: .slideIn(duration: 0.3, direction: .down),
+            hideAnimator: .fadeOut(duration: 0.3)
         )
     }
 }

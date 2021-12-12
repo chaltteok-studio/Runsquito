@@ -73,14 +73,22 @@ final class SlotListView: UIView {
     }()
     
     let tableView: UITableView = {
-        let view = UITableView(frame: .zero, style: .grouped)
+        // Set table view's initial height(over content inset's top) for initial inset rendering.
+        // Code generate view with frame `.zero` conflict autolayout constraints when initial load.
+        // If you set a value above 37 as the height, inset work normally. but i don't know what the number 37 mean.
+        let view = UITableView(
+            frame: .init(
+                origin: .zero,
+                size: .init(
+                    width: 0,
+                    height: SlotListView.headerHeight * 2
+                )
+            ),
+            style: .grouped
+        )
         view.tableHeaderView = UIView(frame: .init(x: 0, y: 0, width: 0, height: CGFloat.leastNormalMagnitude))
         view.contentInset.top = SlotListView.headerHeight
         view.scrollIndicatorInsets.top = SlotListView.headerHeight
-        
-        // Set content offset to (-)top content inset.
-        // because code generate table view's inset not work about initial offset of table view.
-        view.contentOffset.y = -SlotListView.headerHeight
         
         // Cell register
         view.register(SlotListTableViewCell.self, forCellReuseIdentifier: SlotListTableViewCell.name)

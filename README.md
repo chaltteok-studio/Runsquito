@@ -10,7 +10,7 @@ You can get help with implementation like a/b testing controller, develop & qa t
 ### Swift Pacakge Manager
 ```swift
 dependencies: [
-    .package(name: "Runsquito", path: "https://github.com/chaltteok-studio/runsquito-ios", from: "1.2.0")
+    .package(url: "https://github.com/chaltteok-studio/runsquito-ios.git", from: "1.0.0")
 ]
 ```
 

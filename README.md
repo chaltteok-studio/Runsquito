@@ -3,14 +3,13 @@
 
 You can get help with implementation like a/b testing controller, develop & qa test helper etc...
 
-# Screenshot
-<img src="https://user-images.githubusercontent.com/11141077/136648173-b2f87701-03ac-4bfa-a74f-cbdf5d770468.gif" width=260 />
+If you want to configure `Runsquito` with view on iOS. See more [RunsquiotoKit](https://github.com/chaltteok-studio/RunsquitoKit) 
 
 # Installation
 ### Swift Pacakge Manager
 ```swift
 dependencies: [
-    .package(url: "https://github.com/chaltteok-studio/runsquito-ios.git", from: "1.0.0")
+    .package(url: "https://github.com/chaltteok-studio/Runsquito.git", from: "1.0.0")
 ]
 ```
 
@@ -22,8 +21,6 @@ dependencies: [
 
 To use `Runsquito`, you should add a `Slot` into `Runsquito`.
 
-> `ValueSlot` is describe under the `Slot` section.
-
 ```swift
 try Runsquito.default.addSlot(
     ValueSlot<Bool>(description: "This slot is flag for a/b testing some feature."),
@@ -31,7 +28,17 @@ try Runsquito.default.addSlot(
 )
 ```
 
-And add items to serve presets of value.
+And you can set/get the value in the slot.
+
+```swift
+// Set the value in the slot.
+try Runsquito.default.setValue(true, forKey: "ab-testing-some-feature")
+// Get the valuf of slot.
+try Runsquito.defualt.value(Bool.self, forKey: "ab-testing-some-feature")
+```
+
+## Slot
+The `Slot` is value storage. So you can add presets into the slot as a value.
 
 ```swift
 try Runsquito.default.updateItem(
@@ -43,10 +50,9 @@ try Runsquito.default.updateItem(
 
 Then the slot with key `"ab-testing-some-feature"` has a item `true` for executation of A case of a/b testing.
 
-This work perform recommand once like `AppDelegate`.
-
-⚠️ Point to note is `Type`. `Slot` and `Item` has the `Type` of value. So all operations of `Runsquito` perform validation.
-If you add or set value that it's type doesn't match to `Slot`, function throw `RunsquitoError.typeMismatch`.
+> [!note]
+> Point to note is `Type`. `Slot` and `Item` has the `Type` of value. So all operations of `Runsquito` perform validation.
+> If you add or set value that it's type doesn't match to `Slot`, function throw `RunsquitoError.typeMismatch`.
 
 If you add any slots, you can get value of slot anywhere. Configure your logic to handle `Runsquito` value first, and write right logic when value is `nil`.
 
@@ -57,26 +63,6 @@ if Runquito.default.value(Bool.self, forKey: "ab-testing-some-feature") ?? Remot
     // Run `B` process.
 } 
 ```
-
-### RunsquitoKit
-If you use `Runsquito` only programmatically, you only need import `Runsquito` module. and you can make your own view. For your application's feature flags, test & QA helper, etc...
-
-If you need `Runsquito` value edit views, import `RunsquitoKit`.
-
-`RunsquitoKit` has a public `ViewController` named `RunsquitoViewController`.
-
-```swift
-public final class RunsquitoViewController : UINavigationController {
-    public init(runsquito: Runsquito = .default)
-}
-```
-
-It serve default features that manage `Runsquito`. like `Screenshot` section's GIF.
-
-## Slot
-`Slot` is the protocol that manage current value and presets of value.
-
-`Runsquito` serve three `Slot` protocol adopt classes.
 
 ### ValueSlot
 `ValueSlot` is basic slot. It can handle all value of type. but it can't edit.
